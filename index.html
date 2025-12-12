@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tanlov — Foydalanuvchi & Admin (Bitta sahifa)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0f1724;
+    --card: #14213d;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --muted: #a0aec0;
+    --glass: rgba(255, 255, 255, 0.05);
+    --text-primary: #e6eef8;
+    --text-secondary: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background: linear-gradient(180deg, #071025 0%, #081629 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+  }
+
+  main.wrap {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 36px;
+  }
+
+  @media (max-width: 900px) {
+    main.wrap {
+      grid-template-columns: 1fr;
+      padding: 0 12px;
+      gap: 24px;
+    }
+  }
+
+  /* Card styles */
+  section.card,
+  aside.card {
+    background-color: var(--card);
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 10px 30px rgba(15, 23, 36, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 26px;
+  }
+
+  header h1 {
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .muted {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* Buttons */
+  button {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 12px;
+    padding: 12px 18px;
+    border: none;
+    background-color: var(--accent);
+    color: #f9fafb;
+    transition: background-color 0.25s ease;
+    user-select: none;
+  }
+
+  button:hover,
+  button:focus {
+    background-color: var(--accent-hover);
+    outline: none;
+  }
+
+  button.ghost {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    color: var(--muted);
+  }
+
+  button.ghost:hover,
+  button.ghost:focus {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  button.small {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  /* Test area */
+  #testArea h2 {
+    margin: 8px 0 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  #options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .opt {
+    padding: 16px 20px;
+    border-radius: 14px;
+    background: var(--glass);
+    cursor: pointer;
+    user-select: none;
+    border: 2px solid transparent;
+    font-size: 16px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .opt:hover {
+    background-color: rgba(59, 130, 246, 0.15);
+    border-color: var(--accent);
+  }
+
+  .opt.selected {
+    background: var(--accent);
+    color: #0f1724;
+    font-weight: 700;
+    border-color: var(--accent-hover);
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* Controls layout */
+  .controls {
+    margin-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Progress and score */
+  #progress {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  #scoreBadge {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(59, 130, 246, 0.15);
+    padding: 6px 12px;
+    border-radius: 12px;
+  }
+
+  /* Admin panel */
+  .admin-box {
+    gap: 16px;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background-color: transparent;
+    color: var(--text-primary);
+    font-size: 15px;
+    transition: border-color 0.25s ease;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  input[type="number"]:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+
+  ul.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 350px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  li.item {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 14px 20px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+  }
+
+  li.item:hover {
+    background-color: rgba(59, 130, 246, 0.15);
+  }
+
+  .meta {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* Footer */
+  footer {
+    margin-top: auto;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* Utility */
+  .hidden {
+    display: none !important;
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .flex {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <!-- CHAP: Test / Foydalanuvchi maydoni -->
+  <section class="card" id="testCard">
+    <header>
+      <div>
+        <h1>Tanlov Savollari</h1>
+        <div class="muted">Tasodifiy testlarni yeching — omad tilaymiz!</div>
+      </div>
+
+      <div class="top-actions">
+        <button id="openAdminBtn" class="small ghost" type="button">Admin</button>
+        <button id="startBtn" class="small" type="button">Testni boshlash</button>
+      </div>
+    </header>
+
+    <div id="landing">
+      <p class="muted">Boshlash uchun <strong>Testni boshlash</strong> tugmasini bosing. Savollar brauzer <code>localStorage</code> dan olinadi.</p>
+      <div style="margin-top: 20px;">
+        <label class="muted" for="numQ">Foydalaniladigan savollar soni:</label>
+        <div style="display:flex; gap: 12px; margin-top: 10px;">
+          <input id="numQ" type="number" min="1" max="50" value="5" />
+          <button id="shuffleBtn" class="ghost small" type="button">Savollar tartibini aralashtirish</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="testArea" class="hidden" style="margin-top: 24px;">
+      <div id="progress" class="muted">Savol <span id="curIdx">1</span>/<span id="totalQ">1</span></div>
+      <h2 id="qText">Savol matni</h2>
+      <div id="options"></div>
+
+      <div class="controls">
+        <div>
+          <button id="prevBtn" class="ghost small" type="button">Oldingi</button>
+          <button id="nextBtn" class="small" type="button">Keyingi</button>
+        </div>
+        <div class="flex">
+          <div id="scoreBadge" class="meta">Ball: 0</div>
+          <button id="endBtn" class="ghost small" type="button">Testni yakunlash</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="resultArea" class="hidden" style="margin-top: 24px;">
+      <h2>Natija</h2>
+      <p id="finalText" class="muted"></p>
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <button id="retryBtn" type="button">Qayta urinib ko‘rish</button>
+        <button id="backToLanding" class="ghost" type="button">Orqaga</button>
+      </div>
+    </div>
+
+    <footer>Faqat lokal. Savollaringizni Admin bo‘limida saqlang.</footer>
+  </section>
+
+  <!-- O‘NG: Admin paneli -->
+  <aside class="card admin-box" id="adminCard" style="min-height: 600px;">
+    <header style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h1 style="font-size:18px; margin:0;">Admin Paneli</h1>
+        <div class="muted">Parol bilan himoyalangan (faqat old tomonda)</div>
+      </div>
+      <div>
+        <button id="closeAdmin" class="ghost small" type="button">Yopish</button>
+      </div>
+    </header>
+
+    <div id="pwBox" style="margin-top:16px;">
+      <input id="adminPw" type="password" placeholder="Admin parolini kiriting" autocomplete="off" />
+      <div style="display:flex; gap:12px; margin-top:12px;">
+        <button id="loginAdmin" type="button">Kirish</button>
+        <button id="demoLoad" class="ghost" type="button">Demo savollarni yuklash</button>
+      </div>
+      <div id="pwErr" class="muted" style="margin-top: 10px;"></div>
+    </div>
+
+    <div id="adminArea" class="hidden" style="margin-top: 20px;">
+      <label class="muted" for="inQ">Yangi savol qo‘shish</label>
+      <input id="inQ" type="text" placeholder="Savol matni" />
+      <input id="inO1" type="text" placeholder="1-variant" />
+      <input id="inO2" type="text" placeholder="2-variant" />
+      <input id="inO3" type="text" placeholder="3-variant" />
+      <input id="inO4" type="text" placeholder="4-variant" />
+      <input id="inCorrect" type="number" min="1" max="4" placeholder="To‘g‘ri variant (1-4)" />
+      <div style="display:flex; gap:12px; margin-top: 16px;">
+        <button id="addQBtn" type="button">Savol qo‘shish</button>
+        <button id="clearAll" class="ghost" type="button">Hammasini tozalash</button>
+        <button id="exportBtn" class="ghost" type="button">JSON eksport qilish</button>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.07); margin: 24px 0;" />
+
+      <label class="muted">Barcha savollar</label>
+      <ul id="qList" class="list"></ul>
+    </div>
+
+    <div class="muted" style="font-size: 12px; margin-top: auto; text-align: center;">
+      Maslahat: ushbu sahifani bir xil manzil va oynada oching — localStorage manzil bo‘yicha umumiy.
+    </div>
+  </aside>
+
+</main>
+
+<script>
+/* Siz oldingi kodni shu yerda joylashtiring yoki yangilab ishlatishingiz mumkin */
+alert("Salom, mening ismim Mirzohid, ushbu dastur yaratuvchisi!");
+const answer = confirm("Murojat uchun telegram: @zokirov_0712")
+if(answer == true){
+  window.location.href = "https://t.me/zokirov_0712"
+} else{
+  alert("Ha mayli, xohlagan paytingiz murojaat qilishingiz mumkin!")
+}
+/* ========== Sozlamalar ========== */
+const LS_KEY = "tests";
+const ADMIN_PASSWORD = "zokirov0712"; // istalgan parol qo‘yishingiz mumkin
+
+/* ========== Yordamchi funksiyalar ========== */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function readTests(){
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+  } catch(e){ return []; }
+}
+function writeTests(arr){
+  localStorage.setItem(LS_KEY, JSON.stringify(arr));
+}
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+function shuffleArray(a){
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ========== UI elementlari ========== */
+const startBtn = $("#startBtn");
+const openAdminBtn = $("#openAdminBtn");
+const adminCard = $("#adminCard");
+const closeAdmin = $("#closeAdmin");
+
+const pwBox = $("#pwBox");
+const adminArea = $("#adminArea");
+const loginAdmin = $("#loginAdmin");
+const adminPw = $("#adminPw");
+const pwErr = $("#pwErr");
+const demoLoad = $("#demoLoad");
+
+const inQ = $("#inQ"), inO1 = $("#inO1"), inO2 = $("#inO2"), inO3 = $("#inO3"), inO4 = $("#inO4"), inCorrect = $("#inCorrect");
+const addQBtn = $("#addQBtn"), clearAll = $("#clearAll"), exportBtn = $("#exportBtn");
+const qList = $("#qList");
+
+const testArea = $("#testArea"), landing = $("#landing"), resultArea = $("#resultArea");
+const qText = $("#qText"), optionsDiv = $("#options"), curIdx = $("#curIdx"), totalQ = $("#totalQ"), scoreBadge = $("#scoreBadge");
+const nextBtn = $("#nextBtn"), prevBtn = $("#prevBtn"), endBtn = $("#endBtn"), retryBtn = $("#retryBtn"), backToLanding = $("#backToLanding");
+const finalText = $("#finalText");
+const numQ = $("#numQ"), shuffleBtn = $("#shuffleBtn");
+const openAdminFromBtn = $("#openAdminBtn");
+
+/* ========== Testni ishlatish holati ========== */
+let runtime = {
+  pool: [], // localStoragedan olingan barcha savollar
+  session: [], // shu sessiyada ishlatiladigan savollar
+  cur: 0,
+  answers: {}, // savolID -> tanlangan javob (1dan boshlab)
+  score: 0
+};
+
+/* ========== Admin qismi ========== */
+function renderQuestionList(){
+  const list = readTests();
+  qList.innerHTML = "";
+  if(list.length === 0){
+    qList.innerHTML = '<div class="muted">Hozircha savol yo‘q</div>';
+    return;
+  }
+  list.forEach((q, i) => {
+    const li = document.createElement("li"); li.className = "item";
+    const left = document.createElement("div");
+    left.innerHTML = `<div style="font-weight:600">${sanitize(q.question)}</div><div class="meta">Variantlar soni: ${q.options.length} • id:${q.id || i}</div>`;
+    const right = document.createElement("div");
+    const del = document.createElement("button"); del.className="ghost small"; del.textContent="O‘chirish";
+    del.onclick = () => {
+      if(!confirm("Bu savolni o‘chirishni istaysizmi?")) return;
+      const arr = readTests(); arr.splice(i,1); writeTests(arr); renderQuestionList();
+    };
+    right.appendChild(del);
+    li.appendChild(left); li.appendChild(right);
+    qList.appendChild(li);
+  });
+}
+
+function sanitize(txt){
+  const d = document.createElement("div"); d.textContent = txt; return d.innerHTML;
+}
+
+loginAdmin.onclick = () => {
+  if(adminPw.value === ADMIN_PASSWORD){
+    pwBox.classList.add("hidden");
+    adminArea.classList.remove("hidden");
+    pwErr.textContent = "";
+    adminPw.value = "";
+    renderQuestionList();
+  } else {
+    pwErr.textContent = "Noto‘g‘ri parol";
+  }
+};
+
+demoLoad.onclick = () => {
+  // demo savollarni yuklash (agar hozircha bo‘sh bo‘lsa)
+  const cur = readTests();
+  if(cur.length > 0 && !confirm("Mavjud savollarni demo savollar bilan almashtirishni istaysizmi?")) return;
+  const demo = [
+    { id: uid(), question: "Fransiyaning poytaxti qaysi?", options:["Parij","Berlin","Rim","Madrid"], correct:1 },
+    { id: uid(), question: "2+2 teng nechiga?", options:["3","4","22","5"], correct:2 },
+    { id: uid(), question: "HTML nima degani?", options:["HyperText Markup Language","HomeTool Markup Language","Hyperlinks Text Markup","HTM Lang"], correct:1 },
+    { id: uid(), question: "Qaysi sayyora Qizil sayyora sifatida tanilgan?", options:["Yer","Mars","Venera","Yupiter"], correct:2 },
+    { id: uid(), question: "Qaysi til brauzerda ishlaydi?", options:["Python","C++","JavaScript","Java"], correct:3 }
+  ];
+  writeTests(demo);
+  renderQuestionList();
+  alert("Demo savollar yuklandi.");
+};
+
+addQBtn.onclick = () => {
+  const q = inQ.value.trim();
+  const o1 = inO1.value.trim(), o2 = inO2.value.trim(), o3 = inO3.value.trim(), o4 = inO4.value.trim();
+  const c = Number(inCorrect.value);
+  if(!q || !o1 || !o2 || !o3 || !o4 || ![1,2,3,4].includes(c)){
+    alert("Iltimos, barcha maydonlarni to‘ldiring va to‘g‘ri variantni belgilang (1-4).");
+    return;
+  }
+  const arr = readTests();
+  arr.push({ id: uid(), question: q, options: [o1,o2,o3,o4], correct: c });
+  writeTests(arr);
+  inQ.value = inO1.value = inO2.value = inO3.value = inO4.value = inCorrect.value = "";
+  renderQuestionList();
+};
+
+clearAll.onclick = () => {
+  if(!confirm("LocalStoragedan HAMMA savollarni o‘chirishni xohlaysizmi? Bu bekor qilinmaydi.")) return;
+  writeTests([]);
+  renderQuestionList();
+};
+
+exportBtn.onclick = () => {
+  const data = JSON.stringify(readTests(), null, 2);
+  const blob = new Blob([data], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = "tests-export.json"; a.click();
+  URL.revokeObjectURL(url);
+};
+
+/* ========== Testni ishlatish logikasi ========== */
+function prepareSession(){
+  runtime.pool = readTests().slice(); // nusxa
+  const totalAvailable = runtime.pool.length;
+  let want = parseInt(numQ.value) || 5;
+  want = Math.min(Math.max(1, want), totalAvailable || 1);
+  // aralashtirib kerakli savollarni tanlash
+  const poolShuffled = shuffleArray(runtime.pool.slice());
+  runtime.session = poolShuffled.slice(0, want).map(q => {
+    // variantlarni aralashtiramiz, to‘g‘ri javobni saqlab qolamiz
+    const opts = q.options.slice();
+    const order = shuffleArray([0,1,2,3]);
+    const newOpts = order.map(i => opts[i]);
+    const newCorrect = order.indexOf(q.correct - 1) + 1;
+    return { id: q.id, question: q.question, options: newOpts, correct: newCorrect };
+  });
+  runtime.cur = 0;
+  runtime.answers = {};
+  runtime.score = 0;
+  totalQ.textContent = runtime.session.length;
+}
+
+function showCurrent(){
+  const curObj = runtime.session[runtime.cur];
+  curIdx.textContent = (runtime.cur + 1);
+  qText.innerHTML = sanitize(curObj.question);
+  optionsDiv.innerHTML = "";
+  curObj.options.forEach((opt, i) => {
+    const d = document.createElement("div"); d.className = "opt"; d.innerHTML = sanitize(opt);
+    const index1 = i + 1;
+    if(runtime.answers[curObj.id] === index1) d.classList.add("selected");
+    d.onclick = () => {
+      runtime.answers[curObj.id] = index1;
+      $$(".opt").forEach(x=>x.classList.remove("selected"));
+      d.classList.add("selected");
+      updateScoreBadge();
+    };
+    optionsDiv.appendChild(d);
+  });
+  updateScoreBadge();
+}
+
+function updateScoreBadge(){
+  let s = 0;
+  runtime.session.forEach(q => {
+    const chosen = runtime.answers[q.id];
+    if(chosen && chosen === q.correct) s++;
+  });
+  runtime.score = s;
+  scoreBadge.textContent = "Ball: " + s;
+}
+
+startBtn.onclick = () => {
+  const all = readTests();
+  if(all.length === 0){ alert("Saqlangan savollar yo‘q. Iltimos, Admin bo‘limiga kirib savol qo‘shing."); return; }
+  prepareSession();
+  landing.classList.add("hidden");
+  testArea.classList.remove("hidden");
+  resultArea.classList.add("hidden");
+  showCurrent();
+};
+
+nextBtn.onclick = () => {
+  const curObj = runtime.session[runtime.cur];
+  if(!runtime.answers[curObj.id]) {
+    if(!confirm("Bu savolga javob tanlanmadi. Davom etilsinmi?")) return;
+  }
+  if(runtime.cur < runtime.session.length - 1){
+    runtime.cur++; showCurrent();
+  } else {
+    endTest();
+  }
+};
+
+prevBtn.onclick = () => {
+  if(runtime.cur > 0){ runtime.cur--; showCurrent(); }
+};
+
+endBtn.onclick = endTest;
+
+function endTest(){
+  updateScoreBadge();
+  testArea.classList.add("hidden");
+  resultArea.classList.remove("hidden");
+  finalText.textContent = `Siz ${runtime.score} ta savolga to‘g‘ri javob berdingiz, jami savollar soni ${runtime.session.length}.`;
+}
+
+retryBtn.onclick = () => {
+  startBtn.click();
+};
+backToLanding.onclick = () => {
+  landing.classList.remove("hidden");
+  testArea.classList.add("hidden");
+  resultArea.classList.add("hidden");
+};
+
+shuffleBtn.onclick = () => {
+  const arr = readTests();
+  shuffleArray(arr);
+  writeTests(arr);
+  alert("Savollar tartibi saqlash joyida aralashtirildi.");
+};
+
+/* ========== Admin oynasini ochish/yopish (bitta sahifa) ========== */
+openAdminBtn.onclick = () => {
+  adminCard.scrollIntoView({behavior:'smooth', block:'center'});
+  adminPw.focus();
+};
+closeAdmin.onclick = () => {
+  pwBox.classList.remove("hidden");
+  adminArea.classList.add("hidden");
+  adminPw.value = "";
+};
+
+/* ========== Dastur ishga tushishi ========== */
+(function init(){
+  if(!localStorage.getItem(LS_KEY)) localStorage.setItem(LS_KEY, "[]");
+  renderQuestionList();
+
+  adminPw.addEventListener("keydown", (e)=>{ if(e.key==="Enter") loginAdmin.click(); });
+})();
+</script>
+</body>
+</html>
