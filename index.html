@@ -19,6 +19,7 @@
         }
         .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
         .creator-header b { color: var(--accent); text-transform: uppercase; }
+
         main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
 
         /* ADMIN SIDEBAR */
@@ -28,17 +29,19 @@
             padding: 25px; transition: 0.4s; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
         }
         #adminAside.open { left: 0; }
+
         .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
 
-        /* ADMIN LIST STYLE */
+        /* ADMIN INTERFACE */
         .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
         .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
-        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; }
+        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
 
-        .btn-sm { padding: 5px 10px; font-size: 11px; margin-left: 5px; border-radius: 6px; }
-        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; margin-left: 5px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
+        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; text-align: left; font-size: 16px; }
         .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(8px); }
+
         button { cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
         .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; }
         .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
@@ -46,8 +49,14 @@
         .btn-success { background: var(--success); color: white; }
 
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
+
         footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
+        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .hidden { display: none !important; }
+
+        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
+        .analysis-card.correct { border-left: 5px solid var(--success); }
+        .analysis-card.wrong { border-left: 5px solid var(--danger); }
     </style>
 </head>
 <body>
@@ -68,7 +77,7 @@
     </div>
 
     <div id="adminContent" class="hidden">
-        <div id="formTitle">Yangi savol qo'shish</div>
+        <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
         <input type="hidden" id="editId">
         <input id="inCat" placeholder="Bo'lim nomi">
         <textarea id="inQ" placeholder="Savol matni"></textarea>
@@ -89,7 +98,7 @@
 <main class="wrap">
     <section class="card">
         <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h1>Test Portal</h1>
+            <h1 style="margin:0;">Test Portal</h1>
             <button onclick="toggleAdmin()" class="btn-ghost">⚙️ Admin Panel</button>
         </header>
 
@@ -104,18 +113,22 @@
         </div>
 
         <div id="resultPage" class="hidden" style="text-align:center">
-            <h1 id="scoreDisplay" style="font-size:60px;"></h1>
+            <h1 style="margin-bottom:0">Tabriklaymiz!</h1>
+            <p style="color:var(--text-dim)">Test yakunlandi</p>
+            <h1 id="scoreDisplay" style="font-size:60px; margin: 20px 0;"></h1>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="showAnalysis()" class="btn-main" style="grid-column: span 2; background:var(--purple)">📊 Tahlil</button>
-                <button onclick="restartTest()" class="btn-main">🔄 Qayta</button>
-                <button onclick="location.reload()" class="btn-ghost">📂 Bo'limlar</button>
+                <button onclick="showAnalysis()" class="btn-main" style="grid-column: span 2; background:var(--purple)">📊 Test Tahlili</button>
+                <button onclick="restartTest()" class="btn-main">🔄 Qayta yechish</button>
+                <button onclick="location.reload()" class="btn-ghost">📂 Bo'limni o'zgartirish</button>
             </div>
             <div id="analysisBox" class="hidden" style="margin-top:30px;"><div id="analysisList"></div></div>
         </div>
     </section>
 </main>
 
-<footer>Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a> | 2026</footer>
+<footer>
+    Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a> | 2026
+</footer>
 
 <script>
     const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
@@ -123,12 +136,16 @@
     const LETTERS = ["A", "B", "C", "D"];
     let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
 
+    // BAZADAN MA'LUMOT YUKLASH
     async function loadDB() {
-        const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
-        fullDB = await r.json();
-        renderCategories();
+        try {
+            const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
+            fullDB = await r.json();
+            renderCategories();
+        } catch (e) { console.error("Xato:", e); }
     }
 
+    // ADMIN BO'LIMLARNI CHIQARISH
     function renderCategories() {
         const cats = [...new Set(fullDB.map(x => x.category))];
         categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
@@ -138,7 +155,7 @@
             return `
                 <div class="admin-item">
                     <div class="admin-item-header">
-                        <span onclick="toggleQs('${cat}')">📁 <b>${cat}</b> (${catQs.length})</span>
+                        <span onclick="toggleQs('${cat.replace(/\s/g, '')}')">📁 <b>${cat}</b> (${catQs.length})</span>
                         <div>
                             <button onclick="editCategoryName('${cat}')" class="btn-ghost btn-sm">✏️</button>
                             <button onclick="deleteCategory('${cat}')" class="btn-danger btn-sm">🗑️</button>
@@ -147,7 +164,7 @@
                     <div id="qs-${cat.replace(/\s/g, '')}" class="q-list hidden">
                         ${catQs.map(q => `
                             <div class="q-item">
-                                <span onclick="editQuestion(${q.test})" style="cursor:pointer">${q.question.substring(0,25)}...</span>
+                                <span onclick="editQuestion(${q.test})" style="cursor:pointer">${q.question.substring(0,30)}...</span>
                                 <button onclick="deleteQuestion(${q.test})" class="btn-danger btn-sm">X</button>
                             </div>
                         `).join('')}
@@ -157,10 +174,11 @@
         }).join('');
     }
 
-    function toggleQs(cat) { document.getElementById(`qs-${cat.replace(/\s/g, '')}`).classList.toggle('hidden'); }
+    function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
     function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
-    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Xato!"); }
+    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol xato!"); }
 
+    // SAQLASH (YANGI YOKI TAHRIRLANGAN)
     async function saveData() {
         const id = editId.value;
         const body = {
@@ -171,7 +189,6 @@
 
         let url = `${SB_URL}/rest/v1/test`;
         let method = "POST";
-
         if(id) { url += `?test=eq.${id}`; method = "PATCH"; }
 
         const r = await fetch(url, {
@@ -179,7 +196,7 @@
             headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" },
             body: JSON.stringify(body)
         });
-        if(r.ok) { alert("Muvaffaqiyatli saqlandi!"); resetForm(); loadDB(); }
+        if(r.ok) { alert("Saqlandi!"); resetForm(); loadDB(); }
     }
 
     function editQuestion(id) {
@@ -196,20 +213,10 @@
         adminAside.scrollTo({top: 0, behavior: 'smooth'});
     }
 
-    async function deleteQuestion(id) {
-        if(!confirm("Savolni o'chirasizmi?")) return;
-        await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
-        loadDB();
-    }
-
-    async function deleteCategory(cat) {
-        if(!confirm(`${cat} bo'limidagi barcha savollar o'chib ketadi! Rozimisiz?`)) return;
-        await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
-        loadDB();
-    }
-
+    async function deleteQuestion(id) { if(confirm("Savolni o'chirishni xohlaysizmi?")) { await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
+    async function deleteCategory(cat) { if(confirm(`${cat} bo'limini butunlay o'chirib tashlaysizmi?`)) { await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
     async function editCategoryName(oldCat) {
-        const newCat = prompt("Yangi bo'lim nomini kiriting:", oldCat);
+        const newCat = prompt("Yangi bo'lim nomi:", oldCat);
         if(!newCat || newCat === oldCat) return;
         await fetch(`${SB_URL}/rest/v1/test?category=eq.${oldCat}`, {
             method: "PATCH",
@@ -226,34 +233,46 @@
         saveBtn.innerText = "Saqlash";
     }
 
-    // TEST LOGIC
+    // TESTNI BOSHLASH
     async function startTest() {
         const cat = categorySelect.value;
-        if(!cat) return alert("Tanlang!");
+        if(!cat) return alert("Bo'limni tanlang!");
         quizData = fullDB.filter(x => x.category === cat);
-        startPage.classList.add('hidden'); quizPage.classList.remove('hidden');
+        // Savollarni aralashtirish
+        quizData.sort(() => Math.random() - 0.5);
+        startPage.classList.add('hidden');
+        quizPage.classList.remove('hidden');
         showQ();
     }
 
+    // SAVOLNI KO'RSATISH VA VARIANTLARNI ARALASHTIRISH
     function showQ() {
         const q = quizData[currentIdx];
         questionText.innerText = `${currentIdx + 1}. ${q.question}`;
         optionsBox.innerHTML = "";
-        let opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-        opts.forEach((opt, i) => {
+
+        let originalOpts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
+        // Variantlarni obyektga o'girib aralashtirish
+        let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
+        mappedOpts.sort(() => Math.random() - 0.5);
+
+        mappedOpts.forEach((opt, i) => {
             const b = document.createElement('button');
             b.className = "opt-btn";
-            b.innerHTML = `<span class="opt-letter">${LETTERS[i]})</span> ${opt}`;
+            b.innerHTML = `<span style="font-weight:bold; color:var(--accent); margin-right:15px;">${LETTERS[i]})</span> ${opt.txt}`;
             b.onclick = () => {
-                userChoices.push(i); if(i === q.correct) score++;
-                currentIdx++; currentIdx < quizData.length ? showQ() : finish();
+                userChoices.push(opt.originalIdx);
+                if(opt.originalIdx === q.correct) score++;
+                currentIdx++;
+                currentIdx < quizData.length ? showQ() : finish();
             };
             optionsBox.appendChild(b);
         });
     }
 
     function finish() {
-        quizPage.classList.add('hidden'); resultPage.classList.remove('hidden');
+        quizPage.classList.add('hidden');
+        resultPage.classList.remove('hidden');
         scoreDisplay.innerText = `${score} / ${quizData.length}`;
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
@@ -263,15 +282,17 @@
         analysisList.innerHTML = quizData.map((q, i) => {
             const isCorrect = userChoices[i] === q.correct;
             let opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-            return `<div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}" style="text-align:left; padding:15px; margin-bottom:10px; background:rgba(255,255,255,0.05); border-radius:10px;">
-                <b>${i+1}. ${q.question}</b><br>
-                <small style="color:${isCorrect?'#10b981':'#ef4444'}">Siz: ${LETTERS[userChoices[i]]}) ${opts[userChoices[i]]}</small><br>
-                ${!isCorrect ? `<small style="color:#10b981">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small>` : ''}
-            </div>`;
+            return `
+                <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
+                    <b>${i+1}. ${q.question}</b><br>
+                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">Siz: ${LETTERS[userChoices[i]] || '?'}) ${opts[userChoices[i]] || 'Belgilanmagan'}</small><br>
+                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small>` : ''}
+                </div>
+            `;
         }).join('');
     }
 
-    function restartTest() { currentIdx = 0; score = 0; userChoices = []; resultPage.classList.add('hidden'); quizPage.classList.remove('hidden'); showQ(); }
+    function restartTest() { currentIdx = 0; score = 0; userChoices = []; resultPage.classList.add('hidden'); analysisBox.classList.add('hidden'); quizPage.classList.remove('hidden'); startTest(); }
 
     loadDB();
 </script>
