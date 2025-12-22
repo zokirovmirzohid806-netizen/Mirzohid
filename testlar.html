@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tanlov — Professional Test & Tahlil</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #050b18;
+            --card: rgba(23, 32, 53, 0.95);
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --danger: #ef4444;
+            --purple: #8b5cf6;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        main.wrap {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) { main.wrap { grid-template-columns: 1fr; } }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(25px);
+            border-radius: 28px;
+            padding: 35px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 { font-size: 28px; font-weight: 700; background: linear-gradient(to right, #fff, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .muted { color: var(--text-dim); font-size: 14px; }
+
+        input, select, textarea {
+            width: 100%; padding: 15px; margin: 10px 0; border-radius: 14px;
+            border: 1px solid var(--glass-border); background: rgba(0, 0, 0, 0.3);
+            color: white; outline: none; box-sizing: border-box; font-family: inherit;
+        }
+
+        button {
+            cursor: pointer; font-weight: 600; padding: 14px 20px; border-radius: 14px; border: none;
+            background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; transition: 0.3s;
+            font-size: 14px;
+        }
+        button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3); }
+        button.ghost { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); }
+
+        .hidden { display: none !important; }
+
+        .opt-btn {
+            display: flex; width: 100%; text-align: left; margin: 12px 0;
+            background: rgba(255, 255, 255, 0.03); padding: 18px;
+            border: 1px solid var(--glass-border); border-radius: 16px; color: white;
+            align-items: center;
+        }
+        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); }
+        .opt-letter { font-weight: 700; color: var(--accent); margin-right: 15px; }
+
+        .analysis-item {
+            background: rgba(255, 255, 255, 0.02); padding: 20px; border-radius: 16px;
+            margin-bottom: 15px; border-left: 4px solid #333;
+        }
+        .analysis-item.correct { border-left-color: var(--success); }
+        .analysis-item.wrong { border-left-color: var(--danger); }
+
+        .footer { margin-top: auto; padding-top: 30px; text-align: center; border-top: 1px solid var(--glass-border); }
+        .footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<main class="wrap">
+    <section class="card">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <div>
+                <h1>Test Portal</h1>
+                <p class="muted">Mirzohid Zokirov — Platformasi</p>
+            </div>
+            <button id="openAdminBtn" class="ghost">Admin</button>
+        </header>
+
+        <div id="landing">
+            <label class="muted">Bo'limni tanlang:</label>
+            <select id="userCategorySelect"><option>Yuklanmoqda...</option></select>
+            <button id="startBtn" style="width: 100%; margin-top: 15px;">Testni boshlash</button>
+        </div>
+
+        <div id="testArea" class="hidden">
+            <h2 id="qText" style="margin-bottom: 25px;"></h2>
+            <div id="optionsContainer"></div>
+        </div>
+
+        <div id="resultArea" class="hidden">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 id="finalScore" style="font-size: 32px; color: var(--accent);"></h2>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 25px;">
+                    <button id="analysisBtn" style="background: var(--success);">📊 Test tahlili</button>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button id="restartBtn">🔄 Qayta yechish</button>
+                        <button id="changeCatBtn" style="background: var(--purple);">📂 Boshqa bo'lim</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analysisSection" class="hidden">
+                <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">To'liq Tahlil:</h3>
+                <div id="analysisContainer"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p class="muted">Telegram:</p>
+            <a href="https://t.me/zokirov_0712">@zokirov_0712</a>
+        </div>
+    </section>
+
+    <aside class="card hidden" id="adminCard">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3>Admin Panel</h3>
+            <button id="closeAdmin" class="ghost">X</button>
+        </header>
+
+        <div id="pwBox">
+            <input id="adminPw" type="password" placeholder="Parol">
+            <button id="loginAdmin" style="width: 100%;">Kirish</button>
+        </div>
+
+        <div id="adminArea" class="hidden">
+            <input id="inCategory" list="catList" placeholder="Bo'lim nomi">
+            <datalist id="catList"></datalist>
+            <textarea id="inQ" placeholder="Savol matni..."></textarea>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <input id="inO1" placeholder="A variant">
+                <input id="inO2" placeholder="B variant">
+                <input id="inO3" placeholder="C variant">
+                <input id="inO4" placeholder="D variant">
+            </div>
+
+            <input id="inCorrect" placeholder="To'g'ri variant (A, B, C yoki D)" maxlength="1" style="text-transform: uppercase;">
+            <button id="addQBtn" style="width: 100%; margin-top: 10px;">Savolni saqlash</button>
+            <button id="exitAdminBtn" style="width: 100%; margin-top: 10px; background: var(--danger);">Panelni yopish</button>
+
+            <div id="adminList" style="margin-top: 20px; max-height: 180px; overflow-y: auto;"></div>
+        </div>
+    </aside>
+</main>
+
+<script>
+    // --- SUPABASE ULanish ---
+    const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
+    const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
+    const PASS = "zokirov0712";
+    const LETTERS = ["A", "B", "C", "D"];
+
+    let pool = [], current = 0, score = 0, userAnswers = [];
+
+    // Bazadan ma'lumotlarni o'qish
+    async function getDB() {
+        try {
+            const res = await fetch(`${SB_URL}/rest/v1/test?select=*`, {
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
+            });
+            return await res.json();
+        } catch (e) {
+            console.error("Xatolik:", e);
+            return [];
+        }
+    }
+
+    async function renderUI() {
+        const db = await getDB();
+        const cats = [...new Set(db.map(x => x.category))];
+
+        document.getElementById('userCategorySelect').innerHTML = '<option value="">Bo\'limni tanlang...</option>' +
+            cats.map(c => `<option value="${c}">${c}</option>`).join('');
+
+        document.getElementById('catList').innerHTML = cats.map(c => `<option value="${c}">`).join('');
+
+        document.getElementById('adminList').innerHTML = db.map(t => `
+            <div style="font-size:11px; background:rgba(255,255,255,0.05); padding:8px; border-radius:10px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
+                <span>${t.category}: ${t.question.substring(0,25)}...</span>
+                <button onclick="delQ(${t.test})" style="background:var(--danger); padding:2px 8px; font-size:10px; border-radius:5px;">X</button>
+            </div>
+        `).join('');
+    }
+
+    // Login
+    document.getElementById('loginAdmin').onclick = () => {
+        if(document.getElementById('adminPw').value === PASS) {
+            document.getElementById('pwBox').classList.add('hidden');
+            document.getElementById('adminArea').classList.remove('hidden');
+        } else {
+            alert("Parol noto'g'ri!");
+        }
+    };
+
+    // Testni boshlash
+    document.getElementById('startBtn').onclick = async () => {
+        const cat = document.getElementById('userCategorySelect').value;
+        if(!cat) return alert("Bo'limni tanlang!");
+
+        const db = await getDB();
+        pool = db.filter(q => q.category === cat);
+
+        if(pool.length === 0) return alert("Savollar yo'q!");
+
+        document.getElementById('landing').classList.add('hidden');
+        document.getElementById('testArea').classList.remove('hidden');
+        document.getElementById('resultArea').classList.add('hidden');
+        document.getElementById('analysisSection').classList.add('hidden');
+        current = 0; score = 0; userAnswers = [];
+        showQ();
+    };
+
+    function showQ() {
+        const q = pool[current];
+        document.getElementById('qText').textContent = `${current+1}. ${q.question}`;
+        const cont = document.getElementById('optionsContainer');
+        cont.innerHTML = "";
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = "opt-btn";
+            btn.innerHTML = `<span class="opt-letter">${LETTERS[i]})</span> ${opt}`;
+            btn.onclick = () => {
+                userAnswers.push(i);
+                if(i === q.correct) score++;
+                current++;
+                if(current < pool.length) showQ(); else finish();
+            };
+            cont.appendChild(btn);
+        });
+    }
+
+    function finish() {
+        document.getElementById('testArea').classList.add('hidden');
+        document.getElementById('resultArea').classList.remove('hidden');
+        document.getElementById('finalScore').textContent = `Natija: ${score} / ${pool.length}`;
+    }
+
+    // Tahlil
+    document.getElementById('analysisBtn').onclick = () => {
+        const section = document.getElementById('analysisSection');
+        section.classList.toggle('hidden');
+
+        const cont = document.getElementById('analysisContainer');
+        cont.innerHTML = pool.map((q, i) => {
+            const isCorrect = userAnswers[i] === q.correct;
+            return `
+                <div class="analysis-item ${isCorrect ? 'correct' : 'wrong'}">
+                    <div style="font-weight:600; margin-bottom:12px;">${i+1}. ${q.question}</div>
+                    <div style="font-size:14px; margin-bottom:5px;">
+                        <span style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">Sizning javobingiz:</span>
+                        ${LETTERS[userAnswers[i]]}) ${q.options[userAnswers[i]]}
+                    </div>
+                    ${!isCorrect ? `
+                    <div style="font-size:14px;">
+                        <span style="color:var(--success); font-weight:700;">To'g'ri javob:</span>
+                        ${LETTERS[q.correct]}) ${q.options[q.correct]}
+                    </div>` : ''}
+                </div>
+            `;
+        }).join('');
+    };
+
+    // Qayta yechish
+    document.getElementById('restartBtn').onclick = () => {
+        document.getElementById('resultArea').classList.add('hidden');
+        document.getElementById('testArea').classList.remove('hidden');
+        current = 0; score = 0; userAnswers = [];
+        showQ();
+    };
+
+    document.getElementById('changeCatBtn').onclick = () => {
+        document.getElementById('resultArea').classList.add('hidden');
+        document.getElementById('landing').classList.remove('hidden');
+    };
+
+    // Admin yopish
+    const closeAdmin = () => {
+        document.getElementById('adminCard').classList.add('hidden');
+        document.getElementById('adminPw').value = "";
+        document.getElementById('pwBox').classList.remove('hidden');
+        document.getElementById('adminArea').classList.add('hidden');
+    };
+    document.getElementById('closeAdmin').onclick = closeAdmin;
+    document.getElementById('exitAdminBtn').onclick = closeAdmin;
+    document.getElementById('openAdminBtn').onclick = () => document.getElementById('adminCard').classList.remove('hidden');
+
+    // Savol qo'shish (Supabase-ga)
+    document.getElementById('addQBtn').onclick = async () => {
+        const cat = document.getElementById('inCategory').value;
+        const q = document.getElementById('inQ').value;
+        const correctInput = document.getElementById('inCorrect').value.toUpperCase();
+
+        if(!cat || !q || !correctInput) return alert("Hamma joyni to'ldiring!");
+
+        const correctIdx = LETTERS.indexOf(correctInput);
+        if(correctIdx === -1) return alert("To'g'ri javobga faqat A, B, C yoki D kiriting!");
+
+        const obj = {
+            category: cat,
+            question: q,
+            options: [
+                document.getElementById('inO1').value || "Variant A",
+                document.getElementById('inO2').value || "Variant B",
+                document.getElementById('inO3').value || "Variant C",
+                document.getElementById('inO4').value || "Variant D"
+            ],
+            correct: correctIdx
+        };
+
+        const res = await fetch(`${SB_URL}/rest/v1/test`, {
+            method: "POST",
+            headers: {
+                "apikey": SB_KEY,
+                "Authorization": `Bearer ${SB_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify(obj)
+        });
+
+        if(res.ok) {
+            alert("Savol internet bazasiga saqlandi!");
+            document.getElementById('inQ').value = "";
+            document.getElementById('inCorrect').value = "";
+            renderUI();
+        } else {
+            alert("Xatolik yuz berdi!");
+        }
+    };
+
+    // O'chirish
+    window.delQ = async (id) => {
+        if(!confirm("Haqiqatan ham o'chirmoqchimisiz?")) return;
+        await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, {
+            method: "DELETE",
+            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
+        });
+        renderUI();
+    };
+
+    renderUI();
+</script>
+</body>
+</html>
