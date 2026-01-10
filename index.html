@@ -20,74 +20,33 @@
             color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
         }
         .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
-        .creator-header b { color: var(--accent); text-transform: uppercase; }
-
         main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
-
         #adminAside {
             position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
             background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
             padding: 25px; transition: 0.4s; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
         }
         #adminAside.open { left: 0; }
-
         .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-
-        .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
-        .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
-        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
-
-        .btn-sm { padding: 6px 12px; font-size: 12px; margin-left: 5px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
-        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; text-align: left; font-size: 16px; }
-        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(8px); }
-
-        button { cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
-        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; }
-        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-success { background: var(--success); color: white; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
-
-        /* PDF BO'LIMI USLUBI */
-        .pdf-section {
-            margin-top: 25px;
-            padding: 20px;
-            border: 2px dashed var(--purple);
-            border-radius: 20px;
-            background: rgba(139, 92, 246, 0.08);
-        }
-        .file-label {
-            display: block;
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-            border: 1px solid var(--glass-border);
-            text-align: center;
-        }
-
-        footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
-        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
+        .btn-success { background: var(--success); color: white; cursor: pointer; padding: 12px; border-radius: 12px; border: none; font-weight: 600; width: 100%; }
+        .btn-danger { background: var(--danger); color: white; cursor: pointer; padding: 6px 12px; border-radius: 8px; border: none; }
+        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; cursor: pointer; padding: 10px 15px; border-radius: 10px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; }
+        .pdf-section { margin-top: 25px; padding: 20px; border: 2px dashed var(--purple); border-radius: 20px; background: rgba(139, 92, 246, 0.08); }
         .hidden { display: none !important; }
-
-        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
-        .analysis-card.correct { border-left: 5px solid var(--success); }
-        .analysis-card.wrong { border-left: 5px solid var(--danger); }
+        .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
+        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; text-align: left; }
     </style>
 </head>
 <body>
 
-<div class="creator-header">
-    <h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4>
-</div>
+<div class="creator-header"><h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4></div>
 
 <div id="adminAside">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
         <h2>Boshqaruv</h2>
-        <button onclick="toggleAdmin()" class="btn-danger btn-sm">Yopish X</button>
+        <button onclick="toggleAdmin()" class="btn-danger">Yopish X</button>
     </div>
 
     <div id="adminAuth">
@@ -96,33 +55,30 @@
     </div>
 
     <div id="adminContent" class="hidden">
-        <div style="border-bottom: 1px solid var(--glass-border); padding-bottom: 20px;">
-            <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
+        <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px;">
+            <h4 style="margin:0 0 10px 0; color: var(--accent);">Yakkalik savol qo'shish</h4>
             <input id="inCat" placeholder="Bo'lim nomi (Masalan: Tarix)">
             <textarea id="inQ" placeholder="Savol matni"></textarea>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <input id="inA" placeholder="A variant"> <input id="inB" placeholder="B variant">
-                <input id="inC" placeholder="C variant"> <input id="inD" placeholder="D variant">
+                <input id="inA" placeholder="A javob"> <input id="inB" placeholder="B javob">
+                <input id="inC" placeholder="C javob"> <input id="inD" placeholder="D javob">
             </div>
             <input id="inCorrect" placeholder="To'g'ri javob (A, B, C yoki D)">
-            <button onclick="saveData()" class="btn-success" style="width:100%">Yakkalik yuklash</button>
+            <button onclick="saveData()" class="btn-success">Bazaga yuklash</button>
         </div>
 
         <div class="pdf-section">
-            <h4 style="margin:0; color: var(--purple);">Ommaviy PDF yuklash</h4>
-            <p style="font-size: 11px; color: var(--text-dim); margin-bottom: 10px;">PDF uchun alohida bo'lim nomi yozing:</p>
-            <input id="pdfCat" placeholder="PDF bo'limi nomi">
+            <h4 style="margin:0 0 10px 0; color: var(--purple);">Ommaviy PDF yuklash</h4>
+            <label style="font-size: 13px; color: var(--purple);">PDF uchun bo'lim kiriting:</label>
+            <input id="pdfCat" placeholder="Masalan: Ona tili">
             
-            <label class="file-label" for="pdfInput">
-                <span id="fileName">📁 PDF faylni tanlang</span>
-                <input type="file" id="pdfInput" accept=".pdf" class="hidden" onchange="document.getElementById('fileName').innerText = this.files[0].name">
-            </label>
-            
-            <button onclick="processPDF()" id="pdfBtn" class="btn-main" style="width:100%; margin-top:15px; background: var(--purple);">PDF-ni tahlil qilib yuklash</button>
+            <div style="margin-top:10px;">
+                <input type="file" id="pdfInput" accept=".pdf" style="font-size: 12px;">
+                <button onclick="processPDF()" id="pdfBtn" class="btn-main" style="width:100%; margin-top:10px; background: var(--purple);">PDF-dan yuklash</button>
+            </div>
         </div>
 
         <hr style="opacity:0.1; margin:20px 0;">
-        <h3>Mavjud bo'limlar:</h3>
         <div id="adminCategoryList"></div>
     </div>
 </div>
@@ -135,7 +91,7 @@
         </header>
 
         <div id="startPage">
-            <select id="categorySelect"><option value="">Yuklanmoqda...</option></select>
+            <select id="categorySelect"><option value="">Bo'limlarni yuklash...</option></select>
             <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
         </div>
 
@@ -145,138 +101,161 @@
         </div>
 
         <div id="resultPage" class="hidden" style="text-align:center">
-            <h1 id="scoreDisplay" style="font-size:60px; margin: 20px 0;"></h1>
-            <button onclick="showAnalysis()" class="btn-main" style="width:100%; background:var(--purple)">Tahlil</button>
-            <button onclick="location.reload()" class="btn-ghost" style="width:100%; margin-top:10px;">Chiqish</button>
-            <div id="analysisBox" class="hidden" style="margin-top:30px;"><div id="analysisList"></div></div>
+            <h1 id="scoreDisplay"></h1>
+            <button onclick="location.reload()" class="btn-main">Boshiga qaytish</button>
         </div>
     </section>
 </main>
-
-<footer>Murojaat: <a href="https://t.me/zokirov_0712">@zokirov_0712</a> | 2026</footer>
 
 <script>
     const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
     const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
     const LETTERS = ["A", "B", "C", "D"];
-    let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
+    let fullDB = [];
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
     async function loadDB() {
-        try {
-            const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
-            fullDB = await r.json();
-            renderCategories();
-        } catch (e) { console.error(e); }
+        const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { 
+            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
+        });
+        fullDB = await r.json();
+        renderCats();
     }
 
-    function renderCategories() {
+    function renderCats() {
         const cats = [...new Set(fullDB.map(x => x.category))];
-        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-        adminCategoryList.innerHTML = cats.map(cat => {
-            const catQs = fullDB.filter(x => x.category === cat);
-            const safeId = cat.replace(/[^a-z0-9]/gi, '_');
-            return `<div class="admin-item"><div class="admin-item-header" onclick="toggleQs('${safeId}')"><span>📁 <b>${cat}</b> (${catQs.length})</span><button onclick="deleteCategory(event, '${cat}')" class="btn-danger btn-sm">🗑️</button></div><div id="qs-${safeId}" class="q-list hidden">${catQs.map(q => `<div class="q-item"><span>${q.question.slice(0,30)}...</span><button onclick="deleteQuestion(${q.test})" class="btn-danger btn-sm">X</button></div>`).join('')}</div></div>`;
-        }).join('');
+        categorySelect.innerHTML = '<option value="">Tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        adminCategoryList.innerHTML = cats.map(c => `<div class="admin-item"><b>${c}</b> (${fullDB.filter(x=>x.category===c).length} ta savol)</div>`).join('');
     }
 
-    function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
     function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
-    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol noto'g'ri!"); }
+    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Xato!"); }
 
-    // ODDIY YUKLASH
+    // ODDIY YUKLASH FUNKSIYASI
     async function saveData() {
-        const cat = document.getElementById('inCat').value;
-        const q = document.getElementById('inQ').value;
-        const correctStr = document.getElementById('inCorrect').value.toUpperCase();
-        if(!cat || !q || !correctStr) return alert("To'liq to'ldiring!");
+        const cat = inCat.value;
+        const q = inQ.value;
+        const correctLetter = inCorrect.value.toUpperCase();
+        
+        if(!cat || !q || !correctLetter) return alert("Hamma joyni to'ldiring!");
 
-        const body = { category: cat, question: q, options: [document.getElementById('inA').value, document.getElementById('inB').value, document.getElementById('inC').value, document.getElementById('inD').value], correct: LETTERS.indexOf(correctStr) };
-        const res = await fetch(`${SB_URL}/rest/v1/test`, { method: "POST", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify(body) });
-        if(res.ok) { alert("Bazaga qo'shildi!"); loadDB(); }
+        const newItem = {
+            category: cat,
+            question: q,
+            options: [inA.value, inB.value, inC.value, inD.value],
+            correct: LETTERS.indexOf(correctLetter)
+        };
+
+        try {
+            const res = await fetch(`${SB_URL}/rest/v1/test`, {
+                method: "POST",
+                headers: { 
+                    "apikey": SB_KEY, 
+                    "Authorization": `Bearer ${SB_KEY}`, 
+                    "Content-Type": "application/json",
+                    "Prefer": "return=minimal" // Bu sarlavha Supabase-ga ma'lumotni saqlashni buyuradi
+                },
+                body: JSON.stringify(newItem)
+            });
+
+            if(res.ok) {
+                alert("Savol saqlandi!");
+                inQ.value = ""; inA.value = ""; inB.value = ""; inC.value = ""; inD.value = ""; inCorrect.value = "";
+                loadDB();
+            } else {
+                const err = await res.json();
+                alert("Xato: " + err.message);
+            }
+        } catch(e) {
+            alert("Ulanishda xato!");
+        }
     }
 
-    // PDF YUKLASH
+    // PDF YUKLASH FUNKSIYASI
     async function processPDF() {
-        const file = document.getElementById('pdfInput').files[0];
-        const category = document.getElementById('pdfCat').value;
-        if(!file || !category) return alert("PDF bo'limi nomi va faylni tanlang!");
+        const file = pdfInput.files[0];
+        const category = pdfCat.value;
+        if(!file || !category) return alert("Bo'lim nomi va fayl shart!");
 
-        const btn = document.getElementById('pdfBtn');
-        btn.innerText = "Tahlil qilinmoqda..."; btn.disabled = true;
+        const btn = pdfBtn;
+        btn.innerText = "Yuklanmoqda..."; btn.disabled = true;
 
         const reader = new FileReader();
         reader.onload = async function() {
-            try {
-                const typedarray = new Uint8Array(this.result);
-                const pdf = await pdfjsLib.getDocument(typedarray).promise;
-                let fullText = "";
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const content = await page.getTextContent();
-                    fullText += content.items.map(item => item.str).join(" ") + " ";
-                }
-                
-                const questions = [];
-                const rawBlocks = fullText.split(/\d+[\.\)]\s/).filter(b => b.includes('A)') && b.includes('B)'));
+            const typedarray = new Uint8Array(this.result);
+            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+            let text = "";
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const content = await page.getTextContent();
+                text += content.items.map(item => item.str).join(" ") + " ";
+            }
+            
+            const questions = [];
+            const blocks = text.split(/\d+[\.\)]\s/).filter(b => b.includes('A)') && b.includes('B)'));
 
-                rawBlocks.forEach(block => {
-                    let parts = block.split(/[A-D][\.\)]\s/);
-                    if(parts.length >= 5) {
-                        let opts = [parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim()];
-                        let correctIdx = opts.findIndex(o => o.includes('#'));
-                        if(correctIdx !== -1) {
-                            questions.push({ category: category, question: parts[0].trim(), options: opts.map(o => o.replace('#', '').trim()), correct: correctIdx });
-                        }
+            blocks.forEach(block => {
+                let parts = block.split(/[A-D][\.\)]\s/);
+                if(parts.length >= 5) {
+                    let opts = [parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim()];
+                    let correctIdx = opts.findIndex(o => o.includes('#'));
+                    if(correctIdx !== -1) {
+                        questions.push({
+                            category: category,
+                            question: parts[0].trim(),
+                            options: opts.map(o => o.replace('#', '').trim()),
+                            correct: correctIdx
+                        });
                     }
-                });
+                }
+            });
 
-                if(questions.length > 0) {
-                    const res = await fetch(`${SB_URL}/rest/v1/test`, { method: "POST", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify(questions) });
-                    if(res.ok) { alert(`${questions.length} ta savol yuklandi!`); loadDB(); }
-                } else { alert("Format xato yoki # belgisi yo'q!"); }
-            } catch(e) { alert("Xatolik!"); }
-            btn.innerText = "PDF-ni tahlil qilib yuklash"; btn.disabled = false;
+            if(questions.length > 0) {
+                const res = await fetch(`${SB_URL}/rest/v1/test`, {
+                    method: "POST",
+                    headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" },
+                    body: JSON.stringify(questions)
+                });
+                if(res.ok) { alert(questions.length + " ta savol yuklandi!"); loadDB(); }
+            } else { alert("Format xato!"); }
+            btn.innerText = "PDF-dan yuklash"; btn.disabled = false;
         };
         reader.readAsArrayBuffer(file);
     }
 
-    async function deleteQuestion(id) { if(confirm("O'chirilsinmi?")) { await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
-    async function deleteCategory(e, cat) { e.stopPropagation(); if(confirm("O'chirish?")) { await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
-
+    // TESTNI BOSHLASH
+    let quizData = [], curIdx = 0, score = 0;
     function startTest() {
         const cat = categorySelect.value;
         if(!cat) return alert("Tanlang!");
         quizData = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
-        currentIdx = 0; score = 0; userChoices = [];
+        curIdx = 0; score = 0;
         startPage.classList.add('hidden'); quizPage.classList.remove('hidden');
         showQ();
     }
 
     function showQ() {
-        const q = quizData[currentIdx];
-        questionText.innerText = `${currentIdx + 1}. ${q.question}`;
+        const q = quizData[curIdx];
+        questionText.innerText = `${curIdx + 1}. ${q.question}`;
         optionsBox.innerHTML = "";
-        let opts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
-        opts.forEach((txt, i) => {
+        q.options.forEach((txt, i) => {
             const b = document.createElement('button');
             b.className = "opt-btn";
             b.innerHTML = `<b>${LETTERS[i]})</b> ${txt}`;
-            b.onclick = () => { userChoices.push(i); if(i === q.correct) score++; currentIdx++; currentIdx < quizData.length ? showQ() : finish(); };
+            b.onclick = () => {
+                if(i === q.correct) score++;
+                curIdx++;
+                curIdx < quizData.length ? showQ() : finish();
+            };
             optionsBox.appendChild(b);
         });
     }
 
-    function finish() { quizPage.classList.add('hidden'); resultPage.classList.remove('hidden'); scoreDisplay.innerText = `Natija: ${score} / ${quizData.length}`; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
-
-    function showAnalysis() {
-        analysisBox.classList.toggle('hidden');
-        analysisList.innerHTML = quizData.map((q, i) => {
-            let opts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
-            const isCorrect = userChoices[i] === q.correct;
-            return `<div class="analysis-card ${isCorrect?'correct':'wrong'}"><b>${i+1}. ${q.question}</b><br><span style="color:${isCorrect?'#10b981':'#ef4444'}">Siz: ${opts[userChoices[i]] || '---'}</span><br><span style="color:#10b981">To'g'ri: ${opts[q.correct]}</span></div>`;
-        }).join('');
+    function finish() {
+        quizPage.classList.add('hidden'); resultPage.classList.remove('hidden');
+        scoreDisplay.innerText = `Natija: ${score} / ${quizData.length}`;
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
     loadDB();
