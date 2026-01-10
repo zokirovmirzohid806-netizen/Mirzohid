@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Zokirov Mirzohid — Professional Test Portali</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         :root {
@@ -22,7 +24,6 @@
 
         main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
 
-        /* ADMIN SIDEBAR */
         #adminAside {
             position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
             background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
@@ -32,7 +33,6 @@
 
         .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
 
-        /* ADMIN INTERFACE */
         .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
         .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
@@ -49,6 +49,8 @@
         .btn-success { background: var(--success); color: white; }
 
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
+
+        .pdf-box { margin-top: 20px; padding: 15px; border: 2px dashed var(--purple); border-radius: 15px; background: rgba(139, 92, 246, 0.05); }
 
         footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
         footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
@@ -79,7 +81,7 @@
     <div id="adminContent" class="hidden">
         <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
         <input type="hidden" id="editId">
-        <input id="inCat" placeholder="Bo'lim nomi">
+        <input id="inCat" placeholder="Bo'lim nomi (Masalan: Tarix)">
         <textarea id="inQ" placeholder="Savol matni"></textarea>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
             <input id="inA" placeholder="A variant"> <input id="inB" placeholder="B variant">
@@ -88,6 +90,13 @@
         <input id="inCorrect" placeholder="To'g'ri javob (A, B, C yoki D)">
         <button id="saveBtn" onclick="saveData()" class="btn-success" style="width:100%">Saqlash</button>
         <button id="cancelEdit" onclick="resetForm()" class="btn-ghost hidden" style="width:100%; margin-top:5px;">Bekor qilish</button>
+
+        <div class="pdf-box">
+            <h4 style="margin:0 0 10px 0; color: var(--purple);">PDF orqali ommaviy yuklash</h4>
+            <p style="font-size: 11px; color: var(--text-dim);">Qoida: To'g'ri javob oldiga # belgisini qo'ying. <br> Masalan: A) #Toshkent B) Nukus...</p>
+            <input type="file" id="pdfInput" accept=".pdf">
+            <button onclick="processPDF()" id="pdfBtn" class="btn-main" style="width:100%; background: var(--purple);">PDF-dan yuklash</button>
+        </div>
 
         <hr style="opacity:0.1; margin:20px 0;">
         <h3>Mavjud bo'limlar:</h3>
@@ -131,12 +140,15 @@
 </footer>
 
 <script>
+    // Supabase sozlamalari
     const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
     const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
     const LETTERS = ["A", "B", "C", "D"];
     let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
 
-    // BAZADAN MA'LUMOT YUKLASH
+    // PDF.js worker sozlamasi
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
     async function loadDB() {
         try {
             const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
@@ -145,23 +157,23 @@
         } catch (e) { console.error("Xato:", e); }
     }
 
-    // ADMIN BO'LIMLARNI CHIQARISH
     function renderCategories() {
         const cats = [...new Set(fullDB.map(x => x.category))];
         categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
 
         adminCategoryList.innerHTML = cats.map(cat => {
             const catQs = fullDB.filter(x => x.category === cat);
+            const safeId = cat.replace(/[^a-z0-9]/gi, '_');
             return `
                 <div class="admin-item">
                     <div class="admin-item-header">
-                        <span onclick="toggleQs('${cat.replace(/\s/g, '')}')">📁 <b>${cat}</b> (${catQs.length})</span>
+                        <span onclick="toggleQs('${safeId}')">📁 <b>${cat}</b> (${catQs.length})</span>
                         <div>
                             <button onclick="editCategoryName('${cat}')" class="btn-ghost btn-sm">✏️</button>
                             <button onclick="deleteCategory('${cat}')" class="btn-danger btn-sm">🗑️</button>
                         </div>
                     </div>
-                    <div id="qs-${cat.replace(/\s/g, '')}" class="q-list hidden">
+                    <div id="qs-${safeId}" class="q-list hidden">
                         ${catQs.map(q => `
                             <div class="q-item">
                                 <span onclick="editQuestion(${q.test})" style="cursor:pointer">${q.question.substring(0,30)}...</span>
@@ -178,7 +190,67 @@
     function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
     function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol xato!"); }
 
-    // SAQLASH (YANGI YOKI TAHRIRLANGAN)
+    // PDF PROCESSING LOGIC
+    async function processPDF() {
+        const file = document.getElementById('pdfInput').files[0];
+        const category = document.getElementById('inCat').value;
+        if (!file || !category) return alert("Bo'lim nomini yozing va PDF tanlang!");
+
+        const btn = document.getElementById('pdfBtn');
+        btn.innerText = "O'qilmoqda..."; btn.disabled = true;
+
+        try {
+            const reader = new FileReader();
+            reader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
+                const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                let fullText = "";
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    fullText += content.items.map(item => item.str).join(" ") + " ";
+                }
+                parseQuestions(fullText, category);
+            };
+            reader.readAsArrayBuffer(file);
+        } catch (e) { alert("PDF xatosi!"); btn.disabled = false; }
+    }
+
+    async function parseQuestions(text, category) {
+        // Savollarni \d. formatidan qidirish
+        const rawQs = text.split(/\d+[\.\)]\s/).filter(q => q.trim().length > 5);
+        const dataToUpload = [];
+
+        rawQs.forEach(raw => {
+            let parts = raw.split(/[A-D][\.\)]\s/);
+            if (parts.length >= 5) {
+                let options = [parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim()];
+                let correctIdx = options.findIndex(opt => opt.includes('#'));
+                if (correctIdx !== -1) {
+                    options = options.map(o => o.replace('#', '').trim());
+                    dataToUpload.push({
+                        category: category,
+                        question: parts[0].trim(),
+                        options: options,
+                        correct: correctIdx
+                    });
+                }
+            }
+        });
+
+        if (dataToUpload.length > 0) {
+            const r = await fetch(`${SB_URL}/rest/v1/test`, {
+                method: "POST",
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
+                body: JSON.stringify(dataToUpload)
+            });
+            if(r.ok) { alert(`${dataToUpload.length} ta savol yuklandi!`); loadDB(); }
+        } else { alert("Mos keladigan savollar topilmadi!"); }
+        document.getElementById('pdfBtn').innerText = "PDF-dan yuklash";
+        document.getElementById('pdfBtn').disabled = false;
+    }
+
+    // STANDART CRUD AMALLARI
     async function saveData() {
         const id = editId.value;
         const body = {
@@ -186,83 +258,72 @@
             options: [inA.value, inB.value, inC.value, inD.value],
             correct: LETTERS.indexOf(inCorrect.value.toUpperCase())
         };
-
         let url = `${SB_URL}/rest/v1/test`;
-        let method = "POST";
-        if(id) { url += `?test=eq.${id}`; method = "PATCH"; }
+        let method = id ? "PATCH" : "POST";
+        if(id) url += `?test=eq.${id}`;
 
         const r = await fetch(url, {
             method: method,
-            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" },
+            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify(body)
         });
-        if(r.ok) { alert("Saqlandi!"); resetForm(); loadDB(); }
+        if(r.ok) { resetForm(); loadDB(); alert("Saqlandi!"); }
     }
 
     function editQuestion(id) {
         const q = fullDB.find(x => x.test === id);
-        editId.value = q.test;
-        inCat.value = q.category;
-        inQ.value = q.question;
+        editId.value = q.test; inCat.value = q.category; inQ.value = q.question;
         const opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
         inA.value = opts[0]; inB.value = opts[1]; inC.value = opts[2]; inD.value = opts[3];
         inCorrect.value = LETTERS[q.correct];
         formTitle.innerText = "Savolni tahrirlash";
         cancelEdit.classList.remove('hidden');
-        saveBtn.innerText = "O'zgarishlarni saqlash";
         adminAside.scrollTo({top: 0, behavior: 'smooth'});
     }
 
-    async function deleteQuestion(id) { if(confirm("Savolni o'chirishni xohlaysizmi?")) { await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
-    async function deleteCategory(cat) { if(confirm(`${cat} bo'limini butunlay o'chirib tashlaysizmi?`)) { await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
+    async function deleteQuestion(id) { if(confirm("O'chirilsinmi?")) { await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
+    async function deleteCategory(cat) { if(confirm("Bo'limni o'chirish barcha savollarni o'chiradi!")) { await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } }); loadDB(); } }
     async function editCategoryName(oldCat) {
-        const newCat = prompt("Yangi bo'lim nomi:", oldCat);
-        if(!newCat || newCat === oldCat) return;
-        await fetch(`${SB_URL}/rest/v1/test?category=eq.${oldCat}`, {
-            method: "PATCH",
-            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ category: newCat })
-        });
-        loadDB();
+        const newCat = prompt("Yangi nom:", oldCat);
+        if(newCat) {
+            await fetch(`${SB_URL}/rest/v1/test?category=eq.${oldCat}`, {
+                method: "PATCH",
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ category: newCat })
+            });
+            loadDB();
+        }
     }
 
     function resetForm() {
         editId.value = ""; inQ.value = ""; inA.value = ""; inB.value = ""; inC.value = ""; inD.value = ""; inCorrect.value = "";
-        formTitle.innerText = "Yangi savol qo'shish";
-        cancelEdit.classList.add('hidden');
-        saveBtn.innerText = "Saqlash";
+        formTitle.innerText = "Yangi savol qo'shish"; cancelEdit.classList.add('hidden');
     }
 
-    // TESTNI BOSHLASH
-    async function startTest() {
+    // TEST O'YIN QISMI
+    function startTest() {
         const cat = categorySelect.value;
-        if(!cat) return alert("Bo'limni tanlang!");
-        quizData = fullDB.filter(x => x.category === cat);
-        // Savollarni aralashtirish
-        quizData.sort(() => Math.random() - 0.5);
-        startPage.classList.add('hidden');
-        quizPage.classList.remove('hidden');
+        if(!cat) return alert("Tanlang!");
+        quizData = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
+        currentIdx = 0; score = 0; userChoices = [];
+        startPage.classList.add('hidden'); quizPage.classList.remove('hidden');
         showQ();
     }
 
-    // SAVOLNI KO'RSATISH VA VARIANTLARNI ARALASHTIRISH
     function showQ() {
         const q = quizData[currentIdx];
         questionText.innerText = `${currentIdx + 1}. ${q.question}`;
         optionsBox.innerHTML = "";
+        let opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
+        let mapped = opts.map((txt, i) => ({txt, i})).sort(() => Math.random() - 0.5);
 
-        let originalOpts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-        // Variantlarni obyektga o'girib aralashtirish
-        let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
-        mappedOpts.sort(() => Math.random() - 0.5);
-
-        mappedOpts.forEach((opt, i) => {
+        mapped.forEach((opt, idx) => {
             const b = document.createElement('button');
             b.className = "opt-btn";
-            b.innerHTML = `<span style="font-weight:bold; color:var(--accent); margin-right:15px;">${LETTERS[i]})</span> ${opt.txt}`;
+            b.innerHTML = `<span style="color:var(--accent); font-weight:bold; margin-right:15px;">${LETTERS[idx]})</span> ${opt.txt}`;
             b.onclick = () => {
-                userChoices.push(opt.originalIdx);
-                if(opt.originalIdx === q.correct) score++;
+                userChoices.push(opt.i);
+                if(opt.i === q.correct) score++;
                 currentIdx++;
                 currentIdx < quizData.length ? showQ() : finish();
             };
@@ -271,8 +332,7 @@
     }
 
     function finish() {
-        quizPage.classList.add('hidden');
-        resultPage.classList.remove('hidden');
+        quizPage.classList.add('hidden'); resultPage.classList.remove('hidden');
         scoreDisplay.innerText = `${score} / ${quizData.length}`;
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
@@ -285,14 +345,14 @@
             return `
                 <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
                     <b>${i+1}. ${q.question}</b><br>
-                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">Siz: ${LETTERS[userChoices[i]] || '?'}) ${opts[userChoices[i]] || 'Belgilanmagan'}</small><br>
-                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small>` : ''}
+                    <small style="color:${isCorrect?'var(--success)':'var(--danger)'}">Siz: ${opts[userChoices[i]] || '?'}</small><br>
+                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri: ${opts[q.correct]}</small>` : ''}
                 </div>
             `;
         }).join('');
     }
 
-    function restartTest() { currentIdx = 0; score = 0; userChoices = []; resultPage.classList.add('hidden'); analysisBox.classList.add('hidden'); quizPage.classList.remove('hidden'); startTest(); }
+    function restartTest() { resultPage.classList.add('hidden'); analysisBox.classList.add('hidden'); startTest(); }
 
     loadDB();
 </script>
