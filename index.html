@@ -3,130 +3,87 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zokirov Mirzohid — Professional Test Portali</title>
+    <title>Zokirov Mirzohid — Ultra Test Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
         :root {
-            --bg: #050b18; --card: rgba(23, 32, 53, 0.95); --accent: #38bdf8;
-            --text-main: #ffffff; --text-dim: #94a3b8; --glass-border: rgba(255, 255, 255, 0.1);
-            --success: #10b981; --danger: #ef4444; --purple: #8b5cf6;
+            --bg: #030712; --card: #111827; --accent: #38bdf8;
+            --success: #10b981; --border: rgba(255,255,255,0.1);
         }
-        body {
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18);
-            color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
-        }
-        .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
-        
-        #adminAside {
-            position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
-            background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
-            padding: 25px; transition: 0.4s ease-in-out; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
-        }
-        #adminAside.open { left: 0; }
-
-        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 100%; max-width: 800px; }
-        
-        button { cursor: pointer; border: none; font-weight: 600; transition: 0.3s; }
-        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; padding: 12px 20px; border-radius: 12px; }
-        .btn-success { background: var(--success); color: white; padding: 12px; border-radius: 12px; width: 100%; margin-top: 10px; }
-        .btn-danger { background: var(--danger); color: white; padding: 8px 15px; border-radius: 10px; }
-        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 10px 15px; border-radius: 10px; }
-        
-        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; }
-        
-        .file-box { margin-top: 25px; padding: 20px; border: 2px dashed var(--purple); border-radius: 20px; background: rgba(139, 92, 246, 0.08); }
-        
-        /* PROGRESS BAR STYLE */
-        .progress-container { width: 100%; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 15px; display: none; }
-        .progress-bar { width: 0%; height: 10px; background: var(--success); border-radius: 10px; transition: 0.3s; }
-        
+        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: var(--card); border-radius: 20px; padding: 30px; border: 1px solid var(--border); width: 100%; max-width: 800px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        #adminAside { position: fixed; right: -400px; top: 0; width: 380px; height: 100%; background: #1f2937; padding: 25px; transition: 0.4s; z-index: 1000; border-left: 1px solid var(--border); overflow-y: auto; }
+        #adminAside.open { right: 0; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--border); background: #030712; color: white; font-size: 16px; box-sizing: border-box; }
+        button { cursor: pointer; border: none; font-weight: 600; border-radius: 10px; transition: 0.2s; padding: 12px 20px; }
+        .btn-main { background: var(--accent); color: #000; width: 100%; }
+        .btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+        .progress-box { width: 100%; background: #374151; height: 12px; border-radius: 10px; margin: 15px 0; display: none; overflow: hidden; }
+        .p-bar { width: 0%; height: 100%; background: var(--success); transition: 0.3s; }
+        .opt-btn { width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; text-align: left; font-size: 16px; }
+        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); }
         .hidden { display: none !important; }
-        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; text-align: left; }
-
-        footer { margin-top: 50px; text-align: center; border-top: 1px solid var(--glass-border); padding: 20px; width: 100%; max-width: 800px; color: var(--text-dim); }
-        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        footer { margin-top: 40px; opacity: 0.6; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="creator-header"><h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4></div>
-
 <div id="adminAside">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-        <h2 style="margin:0; color: var(--accent);">Boshqaruv</h2>
-        <button onclick="toggleAdmin(false)" class="btn-danger">Yopish X</button>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="color:var(--accent)">Boshqaruv</h2>
+        <button onclick="toggleAdmin(false)" style="background:none; color:white; font-size:20px;">×</button>
     </div>
-
-    <div id="adminAuth">
-        <input type="password" id="adminPass" placeholder="Admin paroli">
-        <button onclick="login()" class="btn-main" style="width:100%">Kirish</button>
-    </div>
-
-    <div id="adminContent" class="hidden">
-        <div class="file-box">
-            <h4 style="margin:0 0 10px 0; color: var(--purple);">Aqlli Fayl Yuklash</h4>
-            <input id="fileCat" placeholder="Bo'lim nomi">
-            <input type="file" id="fileInput" accept=".pdf,.docx" style="margin-top:10px;">
-            
-            <div id="uploadProgress" class="progress-container">
-                <div class="progress-bar" id="pBar"></div>
-                <p id="pText" style="font-size: 10px; text-align: center; margin-top: 5px;">0%</p>
-            </div>
-
-            <div style="font-size: 11px; color: var(--text-dim); margin-top:10px;">
-                Tizim savol oxiridagi <b>?</b> yoki <b>...</b> belgilarini taniydi.<br>
-                Variantlar: To'g'ri <b>++++</b>, Xato <b>====</b>
-            </div>
-            <button onclick="processFile()" id="fileBtn" class="btn-success" style="background: var(--purple);">Bazaga yuklash</button>
-        </div>
-        <div id="adminCategoryList" style="margin-top: 20px; font-size: 13px;"></div>
+    <input type="password" id="adminPass" placeholder="Admin paroli">
+    <button onclick="login()" class="btn-main">Kirish</button>
+    
+    <div id="adminContent" class="hidden" style="margin-top:30px;">
+        <label>Bo'lim nomi:</label>
+        <input id="fileCat" placeholder="Masalan: Akademik yozuv">
+        <label>Word faylni tanlang (.docx):</label>
+        <input type="file" id="fileInput" accept=".docx">
+        
+        <div class="progress-box" id="pBox"><div class="p-bar" id="pBar"></div></div>
+        <p id="pStatus" style="font-size: 12px; text-align: center; margin: 5px 0;"></p>
+        
+        <button onclick="processFast()" id="fileBtn" class="btn-main" style="background:var(--success)">Yuklashni boshlash</button>
     </div>
 </div>
 
-<main class="wrap">
-    <section class="card">
-        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h1 style="margin:0;">Test Portal</h1>
-            <button onclick="toggleAdmin(true)" class="btn-ghost">⚙️ Admin Panel</button>
-        </header>
+<main class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h1 style="margin:0; font-size: 24px;">Test Tizimi</h1>
+        <button onclick="toggleAdmin(true)" style="background:rgba(255,255,255,0.1); color:white;">⚙️ Admin</button>
+    </div>
 
-        <div id="startPage">
-            <select id="categorySelect"><option value="">Bo'limlarni yuklash...</option></select>
-            <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
-        </div>
+    <div id="startPage">
+        <select id="categorySelect"><option>Yuklanmoqda...</option></select>
+        <button onclick="startTest()" class="btn-main" style="margin-top:10px;">Testni boshlash</button>
+    </div>
 
-        <div id="quizPage" class="hidden">
-            <div style="display: flex; justify-content: space-between; color: var(--text-dim); margin-bottom: 10px;">
-                <span id="progressText"></span>
-            </div>
-            <h2 id="questionText"></h2>
-            <div id="optionsBox"></div>
-        </div>
+    <div id="quizPage" class="hidden">
+        <div id="qCount" style="color:var(--accent); font-weight:bold; margin-bottom:10px;"></div>
+        <h2 id="qText" style="font-size: 20px; line-height: 1.5;"></h2>
+        <div id="optionsBox"></div>
+    </div>
 
-        <div id="resultPage" class="hidden" style="text-align:center">
-            <h1 id="scoreDisplay"></h1>
-            <button onclick="location.reload()" class="btn-main">Qayta boshlash</button>
-        </div>
-    </section>
+    <div id="resultPage" class="hidden" style="text-align:center">
+        <h1 id="scoreDisplay" style="font-size: 48px; color: var(--success);"></h1>
+        <button onclick="location.reload()" class="btn-main">Asosiy sahifa</button>
+    </div>
 </main>
 
-<footer>Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a></footer>
+<footer>Dasturchi: <a href="https://t.me/zokirov_0712" style="color:var(--accent); text-decoration:none;">@zokirov_0712</a></footer>
 
 <script>
     const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
     const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
-    const LETTERS = ["A", "B", "C", "D"];
     let fullDB = [];
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-
-    function toggleAdmin(show) { document.getElementById('adminAside').classList.toggle('open', show); }
-    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Xato!"); }
+    function toggleAdmin(s) { document.getElementById('adminAside').classList.toggle('open', s); }
+    function login() { if(adminPass.value === "zokirov0712") adminContent.classList.remove('hidden'); else alert("Xato!"); }
 
     async function loadDB() {
         const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
@@ -135,135 +92,92 @@
         categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
     }
 
-    async function processFile() {
+    async function processFast() {
         const file = fileInput.files[0]; const cat = fileCat.value.trim();
-        if(!file || !cat) return alert("Fayl va bo'limni tanlang!");
+        if(!file || !cat) return alert("Fayl va bo'lim nomi shart!");
         
         fileBtn.disabled = true;
-        document.getElementById('uploadProgress').style.display = 'block';
-        updateProgress(10);
+        pBox.style.display = 'block';
+        pStatus.innerText = "Fayl o'qilmoqda...";
 
-        let text = "";
-        try {
-            if (file.name.endsWith('.pdf')) {
-                const reader = new FileReader();
-                reader.onload = async function() {
-                    const pdf = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
-                    for (let i = 1; i <= pdf.numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const content = await page.getTextContent();
-                        text += content.items.map(item => item.str).join(" ") + "\n";
-                        updateProgress(10 + (i / pdf.numPages * 40));
-                    }
-                    finalizeExtraction(text, cat);
-                };
-                reader.readAsArrayBuffer(file);
-            } else if (file.name.endsWith('.docx')) {
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    const res = await mammoth.extractRawText({ arrayBuffer: e.target.result });
-                    updateProgress(50);
-                    finalizeExtraction(res.value, cat);
-                };
-                reader.readAsArrayBuffer(file);
-            }
-        } catch (e) { alert("Xato!"); resetUpload(); }
-    }
-
-    function updateProgress(val) {
-        const bar = document.getElementById('pBar');
-        const txt = document.getElementById('pText');
-        bar.style.width = val + "%";
-        txt.innerText = Math.round(val) + "%";
-    }
-
-    function finalizeExtraction(rawText, cat) {
-        const questions = [];
-        // Savollarni ?, ... yoki raqamlar orqali ajratish logikasi
-        // Bu regex savol oxirida ?, ko'p nuqta yoki raqamli tartibni qidiradi
-        const blocks = rawText.split(/(?<=[\?\.]{2,10})\s+|(?<=\?)\s+|\n\s*\d+[\.\)]\s+/).filter(b => b.includes('++++'));
-        
-        blocks.forEach(block => {
-            const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            if(lines.length >= 2) {
-                const question = lines[0];
-                const optionsRaw = lines.slice(1).filter(l => l.includes('++++') || l.includes('===='));
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                const res = await mammoth.extractRawText({ arrayBuffer: e.target.result });
+                const text = res.value;
+                const qs = [];
                 
-                if(optionsRaw.length >= 2) {
-                    const options = optionsRaw.map(o => o.replace('++++', '').replace('====', '').trim());
-                    const correctIdx = optionsRaw.findIndex(o => o.includes('++++'));
-                    if(correctIdx !== -1) {
-                        questions.push({ category: cat, question, options, correct: correctIdx });
+                // Ultra-tezkor parser (Sizning faylga moslangan)
+                const blocks = text.split('+++++'); 
+                for(let b of blocks) {
+                    const parts = b.split('=====');
+                    const cleanParts = parts.map(p => p.trim()).filter(p => p.length > 0);
+                    if(cleanParts.length >= 5) {
+                        qs.push({
+                            category: cat,
+                            question: cleanParts[0],
+                            options: cleanParts.slice(1, 5),
+                            correct: 0 // Faylingizda 1-variant doim to'g'ri
+                        });
                     }
                 }
-            }
-        });
-        saveToDB(questions);
+                
+                if(qs.length === 0) throw new Error("Savollar topilmadi!");
+                await uploadInBatches(qs);
+            } catch(err) { alert(err.message); resetUI(); }
+        };
+        reader.readAsArrayBuffer(file);
     }
 
-    async function saveToDB(qs) {
-        updateProgress(70);
-        if(qs.length === 0) { alert("Savollar topilmadi!"); resetUpload(); return; }
-        
-        const res = await fetch(`${SB_URL}/rest/v1/test`, { 
-            method: "POST", 
-            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, 
-            body: JSON.stringify(qs) 
-        });
-
-        if(res.ok) { 
-            updateProgress(100);
-            setTimeout(() => { alert(qs.length + " ta savol yuklandi!"); resetUpload(); loadDB(); }, 500);
-        } else {
-            alert("Bazaga saqlashda xato!");
-            resetUpload();
+    async function uploadInBatches(qs) {
+        const batchSize = 20;
+        for (let i = 0; i < qs.length; i += batchSize) {
+            const batch = qs.slice(i, i + batchSize);
+            const res = await fetch(`${SB_URL}/rest/v1/test`, { 
+                method: "POST", 
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, 
+                body: JSON.stringify(batch) 
+            });
+            if(!res.ok) throw new Error("Bazaga yuklashda xato!");
+            
+            let progress = ((i + batch.length) / qs.length) * 100;
+            pBar.style.width = progress + "%";
+            pStatus.innerText = `Yuklanmoqda: ${Math.round(progress)}% (${i + batch.length}/${qs.length})`;
         }
+        alert("Barcha savollar muvaffaqiyatli yuklandi!");
+        location.reload();
     }
 
-    function resetUpload() {
-        fileBtn.disabled = false;
-        fileBtn.innerText = "Bazaga yuklash";
-        document.getElementById('uploadProgress').style.display = 'none';
-        updateProgress(0);
-    }
+    function resetUI() { fileBtn.disabled = false; pBox.style.display = 'none'; pStatus.innerText = ""; }
 
-    // TEST LOGIKASI
-    let quizData = [], curIdx = 0, score = 0;
+    let quiz = [], current = 0, score = 0;
     function startTest() {
         const cat = categorySelect.value; if(!cat) return alert("Tanlang!");
-        quizData = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
-        curIdx = 0; score = 0;
+        quiz = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
         startPage.classList.add('hidden'); quizPage.classList.remove('hidden');
-        showQ();
+        showQuestion();
     }
 
-    function showQ() {
-        const q = quizData[curIdx];
-        progressText.innerText = `Savol: ${curIdx + 1} / ${quizData.length}`;
-        questionText.innerText = q.question;
+    function showQuestion() {
+        const q = quiz[current];
+        qCount.innerText = `${current + 1} / ${quiz.length}`;
+        qText.innerText = q.question;
         optionsBox.innerHTML = "";
-
-        // Variantlarni har gal almashtirish
-        let currentOptions = q.options.map((text, index) => ({ text, isCorrect: index === q.correct }));
-        currentOptions.sort(() => Math.random() - 0.5);
-
-        currentOptions.forEach((opt, i) => {
+        
+        let shuffled = q.options.map((t, i) => ({ t, ok: i === q.correct })).sort(() => Math.random() - 0.5);
+        shuffled.forEach((o, idx) => {
             const b = document.createElement('button');
             b.className = "opt-btn";
-            b.innerHTML = `<b>${LETTERS[i]})</b> ${opt.text}`;
-            b.onclick = () => {
-                if(opt.isCorrect) score++;
-                curIdx++;
-                curIdx < quizData.length ? showQ() : finish();
-            };
+            b.innerHTML = `<b>${["A","B","C","D"][idx]})</b> ${o.t}`;
+            b.onclick = () => { if(o.ok) score++; current++; current < quiz.length ? showQuestion() : finish(); };
             optionsBox.appendChild(b);
         });
     }
 
     function finish() {
         quizPage.classList.add('hidden'); resultPage.classList.remove('hidden');
-        scoreDisplay.innerText = `Natija: ${score} / ${quizData.length}`;
-        confetti({ particleCount: 150, spread: 70 });
+        scoreDisplay.innerText = `${score} / ${quiz.length}`;
+        confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
     }
 
     loadDB();
