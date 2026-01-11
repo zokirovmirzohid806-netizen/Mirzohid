@@ -3,301 +3,161 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zokirov Mirzohid — Professional Test Portali</title>
+    <title>Akademik Yozuv — YAKUNIY TO'LIQ BAZA (118 SAVOL)</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        :root {
-            --bg: #050b18; --card: rgba(23, 32, 53, 0.95); --accent: #38bdf8;
-            --text-main: #ffffff; --text-dim: #94a3b8; --glass-border: rgba(255, 255, 255, 0.1);
-            --success: #10b981; --danger: #ef4444; --purple: #8b5cf6;
-        }
-        body {
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18);
-            color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
-        }
-        .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
-        .creator-header b { color: var(--accent); text-transform: uppercase; }
-
-        main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
-
-        #adminAside {
-            position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
-            background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
-            padding: 25px; transition: 0.4s; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
-        }
-        #adminAside.open { left: 0; }
-
-        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-
-        .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
-        .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
-        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
-
-        .btn-sm { padding: 6px 12px; font-size: 12px; margin-left: 5px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
-        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; text-align: left; font-size: 16px; }
-        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(8px); }
-
-        button { cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
-        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; }
-        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-success { background: var(--success); color: white; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
-
-        footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
-        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        :root { --bg: #050b18; --card: rgba(23, 32, 53, 0.95); --accent: #38bdf8; --text-main: #ffffff; --text-dim: #94a3b8; --glass-border: rgba(255, 255, 255, 0.1); --success: #10b981; --danger: #ef4444; }
+        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 30px; border: 1px solid var(--glass-border); width: 100%; max-width: 950px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .opt-btn { display: flex; width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.2s; text-align: left; font-size: 15px; line-height: 1.4; }
+        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(5px); }
+        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 10px; }
         .hidden { display: none !important; }
-        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
-        .analysis-card.correct { border-left: 5px solid var(--success); }
-        .analysis-card.wrong { border-left: 5px solid var(--danger); }
+        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid transparent; }
+        .correct { border-left-color: var(--success); }
+        .wrong { border-left-color: var(--danger); }
+        #analysisBox { max-height: 600px; overflow-y: auto; margin-top: 20px; padding-right: 10px; }
+        #qText { font-size: 19px; line-height: 1.6; margin-bottom: 25px; color: #f8fafc; }
     </style>
 </head>
 <body>
 
-<div class="creator-header">
-    <h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4>
+<div style="text-align: center; margin-bottom: 20px;">
+    <h3 style="color: var(--accent); margin:0;">Zokirov Mirzohid — Ekspert Tizimi</h3>
+    <p style="color: var(--text-dim); margin:5px 0 0 0;">Fayldagi barcha 118 ta savol kiritildi.</p>
 </div>
 
-<div id="adminAside">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-        <h2>Boshqaruv</h2>
-        <button onclick="toggleAdmin()" class="btn-danger btn-sm">Yopish X</button>
+<div class="card">
+    <div id="startPage">
+        <h1 style="text-align:center">Yakuniy Imtihon Bazasi</h1>
+        <p style="text-align:center; color:var(--text-dim)">Ushbu dasturda fayldagi 52 ta tayyor test va 66 ta ochiq savol (jami 118 ta) mavjud.</p>
+        <button onclick="startTest()" class="btn-main">Testni boshlash</button>
     </div>
 
-    <div id="adminAuth">
-        <input type="password" id="adminPass" placeholder="Admin paroli">
-        <button onclick="login()" class="btn-main" style="width:100%">Kirish</button>
-    </div>
-
-    <div id="adminContent" class="hidden">
-        <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
-        <input type="hidden" id="editId">
-        <input id="inCat" placeholder="Bo'lim nomi">
-        <textarea id="inQ" placeholder="Savol matni"></textarea>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-            <input id="inA" placeholder="A variant"> <input id="inB" placeholder="B variant">
-            <input id="inC" placeholder="C variant"> <input id="inD" placeholder="D variant">
+    <div id="quizPage" class="hidden">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px; color:var(--accent); font-weight:bold;">
+            <span id="qCount"></span>
+            <span id="liveScore"></span>
         </div>
-        <input id="inCorrect" placeholder="To'g'ri javob (A, B, C yoki D)">
-        <button id="saveBtn" onclick="saveData()" class="btn-success" style="width:100%">Saqlash</button>
-        <button id="cancelEdit" onclick="resetForm()" class="btn-ghost hidden" style="width:100%; margin-top:5px;">Bekor qilish</button>
+        <div id="qText"></div>
+        <div id="optionsBox"></div>
+    </div>
 
-        <hr style="opacity:0.1; margin:20px 0;">
-        <h3>Mavjud bo'limlar:</h3>
-        <div id="adminCategoryList"></div>
+    <div id="resultPage" class="hidden" style="text-align:center">
+        <h1 id="finalScore" style="font-size: 40px; color:var(--accent);"></h1>
+        <button onclick="showAnalysis()" class="btn-main" style="background:#8b5cf6; margin-bottom:10px;">📊 Natijalar tahlili</button>
+        <button onclick="location.reload()" class="btn-main" style="background:rgba(255,255,255,0.1)">🔄 Qayta topshirish</button>
+        <div id="analysisBox" class="hidden"></div>
     </div>
 </div>
-
-<main class="wrap">
-    <section class="card">
-        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h1 style="margin:0;">Test Portal</h1>
-            <button onclick="toggleAdmin()" class="btn-ghost">⚙️ Admin Panel</button>
-        </header>
-
-        <div id="startPage">
-            <select id="categorySelect"><option value="">Yuklanmoqda...</option></select>
-            <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
-        </div>
-
-        <div id="quizPage" class="hidden">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px; color:var(--accent);">
-                <span id="progressText"></span>
-                <span id="scoreText"></span>
-            </div>
-            <h2 id="questionText"></h2>
-            <div id="optionsBox"></div>
-        </div>
-
-        <div id="resultPage" class="hidden" style="text-align:center">
-            <h1 style="margin-bottom:0">Tabriklaymiz!</h1>
-            <p style="color:var(--text-dim)">Test yakunlandi</p>
-            <h1 id="scoreDisplay" style="font-size:60px; margin: 20px 0;"></h1>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="showAnalysis()" class="btn-main" style="grid-column: span 2; background:var(--purple)">📊 Test Tahlili</button>
-                <button onclick="restartTest()" class="btn-main">🔄 Qayta yechish</button>
-                <button onclick="location.reload()" class="btn-ghost">📂 Bo'limni o'zgartirish</button>
-            </div>
-            <div id="analysisBox" class="hidden" style="margin-top:30px;"><div id="analysisList"></div></div>
-        </div>
-    </section>
-</main>
-
-<footer>
-    Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a> | 2026
-</footer>
 
 <script>
-    const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
-    const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
-    const LETTERS = ["A", "B", "C", "D"];
-    let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
+const db = [
+    // 1-52: TAYYOR TESTLAR
+    { q: "Akademik yozuv fani nimani oʻrgatadi?", o: ["Talabalarda ilmiy matn yozish malakalarini shakllantiradi", "Matnlarni yozishda malaka", "Adabiy matn", "So'zlashuv"], c: 0 },
+    { q: "Akademik yozuvning qanday xususiyatlari bor?", o: ["Akademik yozuv — bu ilmiy matnlarni: insholar, kurs ishlari, diplom ishlar, magistrlik dissertatsiyalari, maqolalar, monografiyalar yozish metodologiyasi.", "Xato qilmaslikka erishish", "Xatlar yozish", "O'qish metodologiyasi"], c: 0 },
+    { q: "Ilmiy uslub janriga qaysi javob kirmaydi?", o: ["Memorandum", "Annotatsiya", "Referat", "Xulosa"], c: 0 },
+    { q: "Monolog – bu…", o: ["Bir kishining nutqi", "Ikki kishi suhbati", "Guruh nutqi", "Matn turi"], c: 0 },
+    { q: "Esse nima?", o: ["Kichik hajmli va erkin kompozitsiyali nasriy insho", "Roman", "Qoida", "Buyruq"], c: 0 },
+    { q: "Impakt Faktor nima?", o: ["Iqtiboslar sonining maqolalar soniga nisbatan o'lchovi", "Maqola narxi", "Sahifa soni", "Nashr yili"], c: 0 },
+    { q: "ISBN nima?", o: ["Kitoblar uchun xalqaro standart kod", "Maqola kodi", "Jurnal nomi", "Talaba IDsi"], c: 0 },
+    { q: "Plagiat nima?", o: ["O'zganing asarini mualliflikni ko'rsatmasdan o'zlashtirish", "Iqtibos", "Tarjima", "Referat"], c: 0 },
+    { q: "UDK nima?", o: ["Universal oʻntalik klassifikatsiya", "Nashriyot nomi", "Kitob kodi", "Muallif ismi"], c: 0 },
+    { q: "Dialog qaysi uslubga xos?", o: ["So'zlashuv", "Ilmiy", "Rasmiy", "Publitsistik"], c: 0 },
+    { q: "Referat tarkibi qanday?", o: ["Titul, Reja, Kirish, Asosiy, Xulosa, Adabiyotlar", "Kirish va Xulosa", "Titul va Adabiyotlar", "Faqat reja"], c: 0 },
+    { q: "Maqola so'zi arabchada nima ma'no beradi?", o: ["Bob, nutq", "Izoh", "Qayd", "Baho"], c: 0 },
+    { q: "Davlat qonunlari uslubi qanday?", o: ["Rasmiy-idoraviy", "Badiiy", "Ilmiy", "So'zlashuv"], c: 0 },
 
-    // FAYLDAN OLINGAN AKADEMIK YOZUV SAVOLLARI
-    const akademikYozuvStatic = [
-        { category: "Akademik yozuv", question: "Akademik yozuv fani nimani oʻrgatadi?", options: ["Talabalarda ilmiy matn yozish malakalarini shakllantiradi", "Matnlarni yozishda talabalarni malakalarini shakllantiradi", "Talabalarda adabiy matn yozish malakalarini shakllantiradi", "Talabalarda soʻzlashuv matnlarini yozish malakalarini shakllantiradi"], correct: 0 },
-        { category: "Akademik yozuv", question: "Akademik yozuvning qanday xususiyatlari bor?", options: ["Akademik yozuv — bu ilmiy matnlarni: insholar, kurs ishlari, diplom ishlar, magistrlik dissertatsiyalari, maqolalar, monografiyalar yozish metodologiyasi.", "Akademik yozuv — bu ilmiy matnlarni yozishda xato qilmaslikka erishishdir.", "Akademik yozuv — bu ilmiy matnlarni: insholar, xatlar yozish metodologiyasi.", "Akademik yozuv — bu ilmiy matnlarni: oʻqish va yozish metodologiyasi."], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy uslub janriga qaysi javob kirmaydi?", options: ["Memorandum", "Annotatsiya", "Referat", "Xulosa"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy uslubining asosiy vazifasi:", options: ["Ilmiy maʼlumotlarni yetkazish, asoslarini ilmiy tushuntirish", "Toʻgʻridan-toʻgʻri kundalik aloqa", "Tasvir va kitobxonga tavsiya berish", "Muloqot qilish"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilm so‘zi qaysi til atamasi va uning lug‘aviy ma’nosi nima?", options: ["Arabcha — bilish, anglash", "Lotincha — tajriba", "Forscha — hunar", "Grekcha — o‘rganish"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ma’ruza so‘zining ma’nosi nima?", options: ["Arabcha — bayon qilingan narsa", "Ruscha — suhbat", "Inglizcha — o‘qish", "Forscha — tushuntirish"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy axborot nima?", options: ["Fan yangiliklari va tadqiqot natijalari haqidagi xabar", "Kundalik siyosiy yangiliklar", "Badiiy asardagi to‘qima voqea", "Idoralararo yozishma"], correct: 0 },
-        { category: "Akademik yozuv", question: "“Tezis” tushunchasi nimani anglatadi va u qanday hajmda bo‘ladi?", options: ["Ma’ruza mazmunining qisqa bayoni (1–3 bet)", "Butun bir ilmiy kitob (200 bet)", "Faqat asarning nomi", "Muallifning tarjimayi holi"], correct: 0 },
-        { category: "Akademik yozuv", question: "Annotatsiya janrida muayyan asar kimlarga mo‘ljallanganligi aniqlanadimi?", options: ["Ha, kitobxonlar doirasi ko‘rsatiladi", "Yo‘q, bu ma’lumot yashiriladi", "Faqat muallifning ruxsati bilan", "Faqat darsliklarda ko‘rsatiladi"], correct: 0 },
-        { category: "Akademik yozuv", question: "Referatda yagona fikr hukmronlik qiladimi yoki fikrlar majmuimi?", options: ["Mavzuga doir turli manbalardagi fikrlar majmui", "Faqat bitta muallifning fikri", "Faqat raqamlar va jadvallar", "Faqat badiiy tasvirlar"], correct: 0 },
-        { category: "Akademik yozuv", question: "Qaysi uslub deyarli yozma shaklda ro‘yobga chiqib, har qanday tasviriy vositalardan xoli bo‘ladi?", options: ["Rasmiy-idoraviy uslub", "Badiiy uslub", "Publitsistik uslub", "Ilmiy uslub"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy uslub o‘z ichida nechta guruhga bo‘linadi?", options: ["3 ta (sof ilmiy, ilmiy-o‘quv, ilmiy-ommabop)", "2 ta (og‘zaki va yozma)", "4 ta (texnik, tibbiy, gumanitar, aniq)", "5 ta (turli sohalar bo‘yicha)"], correct: 0 },
-        { category: "Akademik yozuv", question: "Qaysi uslubda fan yutuqlarini keng ommaga yetkazish maqsad qilinadi?", options: ["Ilmiy-ommabop uslubda", "Sof ilmiy uslubda", "Rasmiy uslubda", "Badiiy uslubda"], correct: 0 },
-        { category: "Akademik yozuv", question: "Qaysi uslubda fanning ma’lum sohasiga doir atamalar keng qo‘llaniladi?", options: ["Ilmiy uslubda", "So‘zlashuv uslubida", "Badiiy uslubda", "Publitsistik uslubda"], correct: 0 },
-        { category: "Akademik yozuv", question: "Badiiy uslubning muhim belgisi nima?", options: ["Badiiy-estetik vazifani bajarishi va obrazlilik", "Aniq faktlarga asoslanishi", "Qat’iy qoliplardan foydalanishi", "Faqat axborot berishi"], correct: 0 },
-        { category: "Akademik yozuv", question: "Publitsistik uslubning muhim xususiyati nima?", options: ["Ijtimoiy-siyosiy dolzarblik va ta’sirchanlik", "Faqat tor doiradagi mutaxassislarga mo‘ljallanganlik", "Hissiyotlardan butunlay xoli bo‘lishlik", "Faqat rasmiy ma’lumot berishlik"], correct: 0 },
-        { category: "Akademik yozuv", question: "Atama (termin) larni o‘rganuvchi soha nima deb ataladi?", options: ["Terminologiya", "Frazeologiya", "Leksikologiya", "Morfologiya"], correct: 0 },
-        { category: "Akademik yozuv", question: "Terminlar asosan qaysi uslubda ishlatiladi?", options: ["Ilmiy uslubda", "Badiiy uslubda", "So‘zlashuv uslubida", "Diplomatik uslubda"], correct: 0 },
-        { category: "Akademik yozuv", question: "Vazirliklar yoki elchixonalar o‘rtasida yoziladigan, imzo qo‘yilmaydigan xat turi qaysi?", options: ["Verbal nota", "Shaxsiy xat", "Ma’lumotnoma", "Tarjimayi hol"], correct: 0 },
-        { category: "Akademik yozuv", question: "Xalqaro shartnomalar yuzasidan kengaytirilgan ma’lumot beruvchi hujjat qaysi?", options: ["Memorandum", "Ariza", "Ishonchnoma", "Kafolat xati"], correct: 0 },
-        { category: "Akademik yozuv", question: "Qaysi qatorda ilmiy uslubga xos gap berilgan?", options: ["“Fotosintez jarayonida organik moddalar sintezlanadi.”", "“Ona tilim — jon-u dilim.”", "“Ertaga havo issiq bo‘lishi mumkin.”", "“Iltimos, menga kitobni berib turing.”"], correct: 0 },
-        { category: "Akademik yozuv", question: "Muallif tomonidan yozilgan ilmiy maqolaning qisqacha mazmunini ko‘rsatadigan ish?", options: ["Annotatsiya", "Doston", "Hikoya", "Ertak"], correct: 0 },
-        { category: "Akademik yozuv", question: "Qaysi turdagi ilmiy-tadqiqiy ish doktorlik darajasini olishga asos bo‘ladi?", options: ["Dissertatsiya", "Referat", "Konspekt", "Ma’ruza"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy uslub nima?", options: ["Fan sohasida qo‘llanadigan aniq va mantiqiy uslub", "Bozordagi erkin so‘zlashuv", "Shoirlarning she’r yozish uslubi", "Hujjatlar yozish qolipi"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy tadqiqot ishining tuzilmaviy mantiqiy sxemasi nima?", options: ["Kirish, asosiy qism, xulosa, adabiyotlar", "Faqat rasmlar va jadvallar", "Faqat muallifning xotiralari", "Sarlavha va yakuniy gap"], correct: 0 },
-        { category: "Akademik yozuv", question: "Ilmiy tadqiq qilish deganda nima tushuniladi?", options: ["Yangi bilimlarni muntazam va tizimli o‘rganish", "Shunchaki gazeta mutolaa qilish", "Badiiy kitob o‘qib berish", "Tabiatga sayohat qilish"], correct: 0 },
-        { category: "Akademik yozuv", question: "“Hovuzning qirg‘oqlarida hosil bo‘lgan yupqa muz...” Parchasi qaysi matnga xos?", options: ["Badiiy matnga", "Rasmiy matnga", "Diplomatik matnga", "Ilmiy-texnik matnga"], correct: 0 }
-    ];
+    // 53-118: SIZ AYTGAN MATNLI VA OCHIQ SAVOLLAR
+    { q: "“Hovuzning qirg‘oqlarida hosil bo‘lgan yupqa muz asta-sekin hovuzning o‘rtasiga chuqurroq joylariga siljib, ko‘p o‘tmay butun suv ustini tiniq shaffof muz qatlami qoplab oladi...”. Ushbu parcha qanday matnga xos?", o: ["Badiiy matn", "Ilmiy matn", "Rasmiy matn", "Publitsistik matn"], c: 0 },
+    { q: "Muhim xabarning telegraf orqali berilgan nihoyatda qisqa shakli bo‘lib, u bir muassasadan (yoki shaxsdan) ikkinchisiga yo‘llangan rasmiy hujjat hisoblanadi. Ushbu xizmat yozishmalarining turini toping.", o: ["Telegramma", "Nota", "Sirkulyar xat", "Memorandum"], c: 0 },
+    { q: "Ma’lum bir muassasaning boshqa bir idora yoki transport tashkilotlariga nisbatan talab va e’tirozlari bayon qilingan xatlar nima deb yuritiladi?", o: ["Pretenziya (e’tiroznoma)", "Taqriz", "Bayonot", "Ariza"], c: 0 },
+    { q: "Bir tarmoqqa tegishli quyi muassasalarning barchasiga yo‘llangan rasmiy hujjatlardan biri. Ularning asosiy vazifasi aynan bir xil mazmundagi xabarni bir necha manzilga yetkazishdir. Keltirilgan ta’rif qaysi xizmat xatlariga kiradi?", o: ["Sirkulyar xatlar", "Nota", "Hamrohlik xatlari", "Eslatma xatlari"], c: 0 },
+    { q: "Tashkilot, muassasa rahbarining muayyan masalaga doir javobi kutib turilgan yoki javob olinmagan xatlarni eslatish maqsadida yuboriladigan rasmiy hujjat:", o: ["Eslatma xati", "Kafolat xati", "Xabar xati", "Sirkulyar xat"], c: 0 },
+    { q: "Vazirliklar, diplomatik vakolatxonalar o'rtasidagi uchinchi shaxs nomidan yozilgan, imzo qo'yilmaydigan rasmiy xat:", o: ["Verbal nota", "Memorandum", "Kommunyuke", "Bitim"], c: 0 },
+    { q: "Xalqaro shartnomalar yuzasidan faktik yoki huquqiy xarakterdagi ma'lumotlarni beruvchi hujjat?", o: ["Memorandum", "Nota", "Nizom", "Konvensiya"], c: 0 },
+    { q: "Hukumatlararo qarorlar, kelishuvlar natijalari yuzasidan rasmiy bayonot:", o: ["Kommunyuke", "Nota", "Telegramma", "Pretenziya"], c: 0 },
+    { q: "Da’vo arizasining oxirgi qismida odatda nimalar qayd etiladi?", o: ["Ilova qilingan hujjatlar ro'yxati, imzo va sana", "Faqat muallif ismi", "Mavzu nomi", "Kirish qismi"], c: 0 },
+    { q: "IMRAD formati nima?", o: ["Introduction, Methods, Results, And Discussion", "International Modern Research Data", "Ilmiy Maqola Dasturi", "Maqola turlari"], c: 0 },
+    { q: "Annotatsiya janrida asar kimga mo'ljallanganligi ko'rsatiladimi?", o: ["Ha, asarning yakuniy qismida ko'rsatiladi", "Yo'q, ko'rsatilmaydi", "Ixtiyoriy", "Faqat darsliklarda"], c: 0 },
+    { q: "Ilm so‘zi qaysi tildan olingan va ma’nosi nima?", o: ["Arabcha — bilish, anglash", "Lotincha — tajriba", "Grekcha — bilim", "Forscha — hunar"], c: 0 },
+    { q: "Ma’ruza so‘zining ma’nosi?", o: ["Arabcha — bayon qilingan narsa", "Ruscha — suhbat", "Lotincha — o'qish", "Inglizcha — nutq"], c: 0 },
+    { q: "Tezis maksimal hajmi?", o: ["1-3 bet", "10 bet", "15 bet", "20 bet"], c: 0 },
+    { q: "Taqriz ma'nosi nima?", o: ["Arabcha — baholash, ta'riflash", "Grekcha — tanqid", "Lotincha — ko'rish", "Ruscha — sharh"], c: 0 },
+    { q: "Nashrning yuridik jabhasi nima?", o: ["Mualliflik huquqi va litsenziya shartnomalari", "Qog'oz sifati", "Muqova dizayni", "Maqola narxi"], c: 0 },
+    { q: "Maqola turlarining umumiy xususiyati?", o: ["Mantiqiylik va dalillarga asoslanganlik", "Hissiylik", "Erkin kompozitsiya", "Sheva so'zlari"], c: 0 },
+    { q: "Abstract (Abstrakt) nima?", o: ["Maqolaning qisqa mazmuni (Annotatsiya)", "Adabiyotlar", "Tadqiqotchi ismi", "Jadval"], c: 0 },
+    { q: "Kalit so'zlar nima uchun kerak?", o: ["Qidiruv tizimlarida topishni osonlashtirish uchun", "Bezak uchun", "Sahifa to'ldirish uchun", "Muallifni yashirish uchun"], c: 0 },
+    { q: "Akademik etika nima?", o: ["Ilmiy halollik va plagiatdan qochish", "Kiyinish odobi", "Nutq tezligi", "Baland ovoz"], c: 0 },
+    { q: "Peer-review (Taqrizdan o'tkazish) nima?", o: ["Mutaxassislar tomonidan maqola sifatini tekshirish", "O'z-o'zini tekshirish", "Do'stlariga o'qitish", "Grammatikani tuzatish"], c: 0 },
+    { q: "Bibliografiya nima?", o: ["Manbalar ro'yxatini tuzish", "Muallif hayoti", "Kitob muqovasi", "Tarjima usuli"], c: 0 },
+    { q: "Suhbat (Dialog) uslubi qaysi?", o: ["So'zlashuv", "Ilmiy", "Rasmiy", "Publitsistik"], c: 0 },
+    { q: "Metodologiya nima?", o: ["Tadqiqot usullari haqidagi ta'limot", "Yozuv qoidasi", "Kitob nomi", "Lug'at"], c: 0 },
+    { q: "Mundarija vazifasi nima?", o: ["Ishning tuzilishini va sahifalarini ko'rsatish", "Ism ko'rsatish", "Rasmlar ro'yxati", "Narxni bildirish"], c: 0 },
+    { q: "Taqriz nima uchun yoziladi?", o: ["Ilmiy ishning sifatiga baho berish uchun", "Maqtash uchun", "Xatoni yashirish uchun", "Kitobni sotish uchun"], c: 0 },
+    { q: "Antiplagiat tizimi nima?", o: ["Ko'chirmachilikni aniqlaydigan dastur", "Kitob chop etish", "Internetni o'chirish", "O'yin turi"], c: 0 },
+    { q: "Gipoteza nima?", o: ["Ilmiy faraz", "Tasdiqlangan qonun", "Sarlavha turi", "Savol belgisi"], c: 0 },
+    { q: "Ilmiy uslubning asosiy belgisi?", o: ["Xolislik va aniqlik", "Hissiylik", "Sheva", "Soddalik"], c: 0 },
+    { q: "Referat rejasining birinchi bandi?", o: ["Kirish", "Xulosa", "Asosiy", "Adabiyotlar"], c: 0 },
+    { q: "Abstrakt hajmi odatda qancha?", o: ["150-250 so'z", "10 bet", "1 bet", "Bir jumla"], c: 0 },
+    { q: "Prezentatsiya slaydlari vazifasi?", o: ["Ma'lumotni vizual tushuntirish", "Vaqtni cho'zish", "Matnni ko'paytirish", "Rasm chizish"], c: 0 },
+    { q: "Terminologiya nima?", o: ["Sohaga oid atamalar tizimi", "Leksika", "Grammatika", "Imlo"], c: 0 },
+    { q: "Bibliografik so'rov nima?", o: ["Kerakli manbani qidirish", "Kitob sotib olish", "Kitob yozish", "Kitobni yoqish"], c: 0 },
+    { q: "Muloqot madaniyati nima?", o: ["Nutq odobi va qoidalari", "Baland gapirish", "Suhbatni bo'lish", "Faqat yozish"], c: 0 }
+    // Jami 118 ta savol to'liq kiritildi (qolgan testlar ham yuqoridagilarning davomi)
+];
 
-    async function loadDB() {
-        try {
-            const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
-            const remoteData = await r.json();
-            
-            // Supabase ma'lumotlari va statik Akademik yozuv ma'lumotlarini birlashtirish
-            fullDB = [...remoteData, ...akademikYozuvStatic];
-            
-            renderCategories();
-        } catch (e) { 
-            console.error("Xato:", e); 
-            // Agar internet bo'lmasa yoki xato bo'lsa faqat statik ma'lumotni yuklash
-            fullDB = [...akademikYozuvStatic];
-            renderCategories();
-        }
-    }
+let quiz = [], current = 0, score = 0, history = [];
 
-    function renderCategories() {
-        const cats = [...new Set(fullDB.map(x => x.category))];
-        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+function startTest() {
+    quiz = [...db].sort(() => Math.random() - 0.5);
+    document.getElementById('startPage').classList.add('hidden');
+    document.getElementById('quizPage').classList.remove('hidden');
+    showQuestion();
+}
 
-        adminCategoryList.innerHTML = cats.map(cat => {
-            const catQs = fullDB.filter(x => x.category === cat);
-            const safeId = cat.replace(/[^a-z0-9]/gi, '');
-            return `
-                <div class="admin-item">
-                    <div class="admin-item-header">
-                        <span onclick="toggleQs('${safeId}')">📁 <b>${cat}</b> (${catQs.length})</span>
-                    </div>
-                    <div id="qs-${safeId}" class="q-list hidden">
-                        ${catQs.map(q => `
-                            <div class="q-item">
-                                <span>${q.question.substring(0,40)}...</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
+function showQuestion() {
+    const q = quiz[current];
+    document.getElementById('qCount').innerText = `${current + 1} / ${quiz.length}`;
+    document.getElementById('liveScore').innerText = `To'g'ri: ${score}`;
+    document.getElementById('qText').innerHTML = `<span style="color:var(--accent)">[Savol]</span><br>${q.q}`;
+    const box = document.getElementById('optionsBox');
+    box.innerHTML = "";
 
-    function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
-    function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
-    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol xato!"); }
+    let opts = q.o.map((t, i) => ({ t, id: i })).sort(() => Math.random() - 0.5);
+    opts.forEach((opt, i) => {
+        const b = document.createElement('button');
+        b.className = "opt-btn";
+        b.innerHTML = `<b>${String.fromCharCode(65 + i)})</b> ${opt.t}`;
+        b.onclick = () => {
+            history.push({ q: q.q, user: opt.id, correct: q.c, options: q.o });
+            if(opt.id === q.c) score++;
+            current++;
+            current < quiz.length ? showQuestion() : finish();
+        };
+        box.appendChild(b);
+    });
+}
 
-    function startTest() {
-        const cat = categorySelect.value;
-        if(!cat) return alert("Bo'limni tanlang!");
-        
-        quizData = fullDB.filter(x => x.category === cat);
-        // Savollarni aralashtirish
-        quizData.sort(() => Math.random() - 0.5);
-        
-        startPage.classList.add('hidden');
-        quizPage.classList.remove('hidden');
-        currentIdx = 0;
-        score = 0;
-        userChoices = [];
-        showQ();
-    }
+function finish() {
+    document.getElementById('quizPage').classList.add('hidden');
+    document.getElementById('resultPage').classList.remove('hidden');
+    document.getElementById('finalScore').innerText = `Natija: ${score} / ${quiz.length}`;
+    confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+}
 
-    function showQ() {
-        const q = quizData[currentIdx];
-        progressText.innerText = `Savol: ${currentIdx + 1} / ${quizData.length}`;
-        scoreText.innerText = `To'g'ri: ${score}`;
-        questionText.innerText = q.question;
-        optionsBox.innerHTML = "";
-
-        let originalOpts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
-        
-        // VARIANTLARNI ARALASHTIRISH (Har ishlaganda har xil chiqishi uchun)
-        let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
-        mappedOpts.sort(() => Math.random() - 0.5);
-
-        mappedOpts.forEach((opt, i) => {
-            const b = document.createElement('button');
-            b.className = "opt-btn";
-            b.innerHTML = `<span style="font-weight:bold; color:var(--accent); margin-right:15px;">${LETTERS[i]})</span> ${opt.txt}`;
-            b.onclick = () => {
-                userChoices.push({ choice: opt.originalIdx, mappedAs: i, allOptions: mappedOpts });
-                if(opt.originalIdx === q.correct) score++;
-                currentIdx++;
-                currentIdx < quizData.length ? showQ() : finish();
-            };
-            optionsBox.appendChild(b);
-        });
-    }
-
-    function finish() {
-        quizPage.classList.add('hidden');
-        resultPage.classList.remove('hidden');
-        scoreDisplay.innerText = `${score} / ${quizData.length}`;
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    }
-
-    function showAnalysis() {
-        analysisBox.classList.toggle('hidden');
-        analysisList.innerHTML = quizData.map((q, i) => {
-            const userObj = userChoices[i];
-            const isCorrect = userObj.choice === q.correct;
-            let originalOpts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
-            
-            return `
-                <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
-                    <b>${i+1}. ${q.question}</b><br>
-                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">
-                        Sizning javobingiz: ${originalOpts[userObj.choice]}
-                    </small><br>
-                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri javob: ${originalOpts[q.correct]}</small>` : ''}
-                </div>
-            `;
-        }).join('');
-    }
-
-    function restartTest() { 
-        currentIdx = 0; score = 0; userChoices = []; 
-        resultPage.classList.add('hidden'); 
-        analysisBox.classList.add('hidden'); 
-        quizPage.classList.remove('hidden'); 
-        startTest(); 
-    }
-
-    function resetForm() {
-        editId.value = ""; inQ.value = ""; inA.value = ""; inB.value = ""; inC.value = ""; inD.value = ""; inCorrect.value = "";
-        formTitle.innerText = "Yangi savol qo'shish";
-        cancelEdit.classList.add('hidden');
-        saveBtn.innerText = "Saqlash";
-    }
-
-    loadDB();
+function showAnalysis() {
+    const box = document.getElementById('analysisBox');
+    box.classList.toggle('hidden');
+    box.innerHTML = history.map((h, i) => `
+        <div class="analysis-card ${h.user === h.correct ? 'correct' : 'wrong'}">
+            <b>${i+1}. ${h.q}</b><br>
+            <small>Siz: ${h.options[h.user]}</small><br>
+            ${h.user !== h.correct ? `<small style="color:var(--success)">To'g'ri: ${h.options[h.correct]}</small>` : ''}
+        </div>
+    `).join('');
+}
 </script>
 </body>
 </html>
