@@ -3,181 +3,298 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zokirov Mirzohid — Professional Test</title>
+    <title>Zokirov Mirzohid — Professional Test Portali</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
-        :root { --bg: #030712; --card: #111827; --accent: #38bdf8; --success: #10b981; }
-        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .card { background: var(--card); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 800px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        #adminAside { position: fixed; right: -400px; top: 0; width: 380px; height: 100%; background: #1f2937; padding: 25px; transition: 0.4s; z-index: 1000; border-left: 1px solid rgba(255,255,255,0.1); overflow-y: auto; box-sizing: border-box;}
-        #adminAside.open { right: 0; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: #030712; color: white; font-size: 16px; box-sizing: border-box; }
-        button { cursor: pointer; border: none; font-weight: 600; border-radius: 10px; transition: 0.2s; padding: 12px 20px; }
-        .btn-main { background: var(--accent); color: #000; width: 100%; }
-        .progress-box { width: 100%; background: #374151; height: 12px; border-radius: 10px; margin: 15px 0; display: none; overflow: hidden; }
-        .p-bar { width: 0%; height: 100%; background: var(--success); transition: 0.3s; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        :root {
+            --bg: #050b18; --card: rgba(23, 32, 53, 0.95); --accent: #38bdf8;
+            --text-main: #ffffff; --text-dim: #94a3b8; --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #10b981; --danger: #ef4444; --purple: #8b5cf6;
+        }
+        body {
+            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18);
+            color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
+        }
+        .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
+        .creator-header b { color: var(--accent); text-transform: uppercase; }
+
+        main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
+
+        #adminAside {
+            position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
+            background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
+            padding: 25px; transition: 0.4s; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
+        }
+        #adminAside.open { left: 0; }
+
+        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+
+        .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
+        .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
+        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+
+        .btn-sm { padding: 6px 12px; font-size: 12px; margin-left: 5px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
+        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; text-align: left; font-size: 16px; }
+        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(8px); }
+
+        button { cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
+        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; }
+        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
+
+        footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
+        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .hidden { display: none !important; }
-        .opt-btn { width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; text-align: left; }
+        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
+        .analysis-card.correct { border-left: 5px solid var(--success); }
+        .analysis-card.wrong { border-left: 5px solid var(--danger); }
     </style>
 </head>
 <body>
 
+<div class="creator-header">
+    <h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4>
+</div>
+
 <div id="adminAside">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2 style="color:var(--accent)">Admin Panel</h2>
-        <button onclick="toggleAdmin(false)" style="background:none; color:white; font-size:24px;">×</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <h2>Boshqaruv</h2>
+        <button onclick="toggleAdmin()" class="btn-danger btn-sm">Yopish X</button>
     </div>
-    <input type="password" id="adminPass" placeholder="Admin paroli">
-    <button onclick="login()" class="btn-main">Kirish</button>
-    
-    <div id="adminContent" class="hidden" style="margin-top:30px;">
-        <input id="fileCat" placeholder="Bo'lim nomi">
-        <input type="file" id="fileInput" accept=".docx">
-        <div class="progress-box" id="pBox"><div class="p-bar" id="pBar"></div></div>
-        <p id="pStatus" style="font-size: 12px; text-align: center; margin: 5px 0; color: var(--success);"></p>
-        <button onclick="processRobust()" id="fileBtn" class="btn-main" style="background:var(--success)">Yuklashni boshlash</button>
+
+    <div id="adminAuth">
+        <input type="password" id="adminPass" placeholder="Admin paroli">
+        <button onclick="login()" class="btn-main" style="width:100%">Kirish</button>
+    </div>
+
+    <div id="adminContent" class="hidden">
+        <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
+        <input type="hidden" id="editId">
+        <input id="inCat" placeholder="Bo'lim nomi">
+        <textarea id="inQ" placeholder="Savol matni"></textarea>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input id="inA" placeholder="A variant"> <input id="inB" placeholder="B variant">
+            <input id="inC" placeholder="C variant"> <input id="inD" placeholder="D variant">
+        </div>
+        <input id="inCorrect" placeholder="To'g'ri javob (A, B, C yoki D)">
+        <button id="saveBtn" onclick="saveData()" class="btn-success" style="width:100%">Saqlash</button>
+        <button id="cancelEdit" onclick="resetForm()" class="btn-ghost hidden" style="width:100%; margin-top:5px;">Bekor qilish</button>
+
+        <hr style="opacity:0.1; margin:20px 0;">
+        <h3>Mavjud bo'limlar:</h3>
+        <div id="adminCategoryList"></div>
     </div>
 </div>
 
-<main class="card">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h1 style="margin:0; font-size: 24px;">Test Tizimi</h1>
-        <button onclick="toggleAdmin(true)" style="background:rgba(255,255,255,0.1); color:white;">⚙️ Admin</button>
-    </div>
+<main class="wrap">
+    <section class="card">
+        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h1 style="margin:0;">Test Portal</h1>
+            <button onclick="toggleAdmin()" class="btn-ghost">⚙️ Admin Panel</button>
+        </header>
 
-    <div id="startPage">
-        <select id="categorySelect"><option>Yuklanmoqda...</option></select>
-        <button onclick="startTest()" class="btn-main" style="margin-top:10px;">Boshlash</button>
-    </div>
+        <div id="startPage">
+            <select id="categorySelect"><option value="">Yuklanmoqda...</option></select>
+            <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
+        </div>
 
-    <div id="quizPage" class="hidden">
-        <div id="qCount" style="color:var(--accent); font-weight:bold; margin-bottom:10px;"></div>
-        <h2 id="qText" style="font-size: 18px;"></h2>
-        <div id="optionsBox"></div>
-    </div>
+        <div id="quizPage" class="hidden">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; color:var(--accent);">
+                <span id="progressText"></span>
+                <span id="scoreText"></span>
+            </div>
+            <h2 id="questionText"></h2>
+            <div id="optionsBox"></div>
+        </div>
 
-    <div id="resultPage" class="hidden" style="text-align:center">
-        <h1 id="scoreDisplay" style="font-size: 40px;"></h1>
-        <button onclick="location.reload()" class="btn-main">Qayta yechish</button>
-    </div>
+        <div id="resultPage" class="hidden" style="text-align:center">
+            <h1 style="margin-bottom:0">Tabriklaymiz!</h1>
+            <p style="color:var(--text-dim)">Test yakunlandi</p>
+            <h1 id="scoreDisplay" style="font-size:60px; margin: 20px 0;"></h1>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <button onclick="showAnalysis()" class="btn-main" style="grid-column: span 2; background:var(--purple)">📊 Test Tahlili</button>
+                <button onclick="restartTest()" class="btn-main">🔄 Qayta yechish</button>
+                <button onclick="location.reload()" class="btn-ghost">📂 Bo'limni o'zgartirish</button>
+            </div>
+            <div id="analysisBox" class="hidden" style="margin-top:30px;"><div id="analysisList"></div></div>
+        </div>
+    </section>
 </main>
+
+<footer>
+    Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a> | 2026
+</footer>
 
 <script>
     const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
     const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
-    let fullDB = [];
+    const LETTERS = ["A", "B", "C", "D"];
+    let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
 
-    function toggleAdmin(s) { document.getElementById('adminAside').classList.toggle('open', s); }
-    function login() { if(adminPass.value === "zokirov0712") adminContent.classList.remove('hidden'); else alert("Xato!"); }
+    // FAYLDAN OLINGAN AKADEMIK YOZUV SAVOLLARI
+    const akademikYozuvStatic = [
+        { category: "Akademik yozuv", question: "Akademik yozuv fani nimani oʻrgatadi?", options: ["Talabalarda ilmiy matn yozish malakalarini shakllantiradi", "Matnlarni yozishda talabalarni malakalarini shakllantiradi", "Talabalarda adabiy matn yozish malakalarini shakllantiradi", "Talabalarda soʻzlashuv matnlarini yozish malakalarini shakllantiradi"], correct: 0 },
+        { category: "Akademik yozuv", question: "Akademik yozuvning qanday xususiyatlari bor?", options: ["Akademik yozuv — bu ilmiy matnlarni: insholar, kurs ishlari, diplom ishlar, magistrlik dissertatsiyalari, maqolalar, monografiyalar yozish metodologiyasi.", "Akademik yozuv — bu ilmiy matnlarni yozishda xato qilmaslikka erishishdir.", "Akademik yozuv — bu ilmiy matnlarni: insholar, xatlar yozish metodologiyasi.", "Akademik yozuv — bu ilmiy matnlarni: oʻqish va yozish metodologiyasi."], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy uslub janriga qaysi javob kirmaydi?", options: ["Memorandum", "Annotatsiya", "Referat", "Xulosa"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy uslubining asosiy vazifasi:", options: ["Ilmiy maʼlumotlarni yetkazish, asoslarini ilmiy tushuntirish", "Toʻgʻridan-toʻgʻri kundalik aloqa", "Tasvir va kitobxonga tavsiya berish", "Muloqot qilish"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilm so‘zi qaysi til atamasi va uning lug‘aviy ma’nosi nima?", options: ["Arabcha — bilish, anglash", "Lotincha — tajriba", "Forscha — hunar", "Grekcha — o‘rganish"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ma’ruza so‘zining ma’nosi nima?", options: ["Arabcha — bayon qilingan narsa", "Ruscha — suhbat", "Inglizcha — o‘qish", "Forscha — tushuntirish"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy axborot nima?", options: ["Fan yangiliklari va tadqiqot natijalari haqidagi xabar", "Kundalik siyosiy yangiliklar", "Badiiy asardagi to‘qima voqea", "Idoralararo yozishma"], correct: 0 },
+        { category: "Akademik yozuv", question: "“Tezis” tushunchasi nimani anglatadi va u qanday hajmda bo‘ladi?", options: ["Ma’ruza mazmunining qisqa bayoni (1–3 bet)", "Butun bir ilmiy kitob (200 bet)", "Faqat asarning nomi", "Muallifning tarjimayi holi"], correct: 0 },
+        { category: "Akademik yozuv", question: "Annotatsiya janrida muayyan asar kimlarga mo‘ljallanganligi aniqlanadimi?", options: ["Ha, kitobxonlar doirasi ko‘rsatiladi", "Yo‘q, bu ma’lumot yashiriladi", "Faqat muallifning ruxsati bilan", "Faqat darsliklarda ko‘rsatiladi"], correct: 0 },
+        { category: "Akademik yozuv", question: "Referatda yagona fikr hukmronlik qiladimi yoki fikrlar majmuimi?", options: ["Mavzuga doir turli manbalardagi fikrlar majmui", "Faqat bitta muallifning fikri", "Faqat raqamlar va jadvallar", "Faqat badiiy tasvirlar"], correct: 0 },
+        { category: "Akademik yozuv", question: "Qaysi uslub deyarli yozma shaklda ro‘yobga chiqib, har qanday tasviriy vositalardan xoli bo‘ladi?", options: ["Rasmiy-idoraviy uslub", "Badiiy uslub", "Publitsistik uslub", "Ilmiy uslub"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy uslub o‘z ichida nechta guruhga bo‘linadi?", options: ["3 ta (sof ilmiy, ilmiy-o‘quv, ilmiy-ommabop)", "2 ta (og‘zaki va yozma)", "4 ta (texnik, tibbiy, gumanitar, aniq)", "5 ta (turli sohalar bo‘yicha)"], correct: 0 },
+        { category: "Akademik yozuv", question: "Qaysi uslubda fan yutuqlarini keng ommaga yetkazish maqsad qilinadi?", options: ["Ilmiy-ommabop uslubda", "Sof ilmiy uslubda", "Rasmiy uslubda", "Badiiy uslubda"], correct: 0 },
+        { category: "Akademik yozuv", question: "Qaysi uslubda fanning ma’lum sohasiga doir atamalar keng qo‘llaniladi?", options: ["Ilmiy uslubda", "So‘zlashuv uslubida", "Badiiy uslubda", "Publitsistik uslubda"], correct: 0 },
+        { category: "Akademik yozuv", question: "Badiiy uslubning muhim belgisi nima?", options: ["Badiiy-estetik vazifani bajarishi va obrazlilik", "Aniq faktlarga asoslanishi", "Qat’iy qoliplardan foydalanishi", "Faqat axborot berishi"], correct: 0 },
+        { category: "Akademik yozuv", question: "Publitsistik uslubning muhim xususiyati nima?", options: ["Ijtimoiy-siyosiy dolzarblik va ta’sirchanlik", "Faqat tor doiradagi mutaxassislarga mo‘ljallanganlik", "Hissiyotlardan butunlay xoli bo‘lishlik", "Faqat rasmiy ma’lumot berishlik"], correct: 0 },
+        { category: "Akademik yozuv", question: "Atama (termin) larni o‘rganuvchi soha nima deb ataladi?", options: ["Terminologiya", "Frazeologiya", "Leksikologiya", "Morfologiya"], correct: 0 },
+        { category: "Akademik yozuv", question: "Terminlar asosan qaysi uslubda ishlatiladi?", options: ["Ilmiy uslubda", "Badiiy uslubda", "So‘zlashuv uslubida", "Diplomatik uslubda"], correct: 0 },
+        { category: "Akademik yozuv", question: "Vazirliklar yoki elchixonalar o‘rtasida yoziladigan, imzo qo‘yilmaydigan xat turi qaysi?", options: ["Verbal nota", "Shaxsiy xat", "Ma’lumotnoma", "Tarjimayi hol"], correct: 0 },
+        { category: "Akademik yozuv", question: "Xalqaro shartnomalar yuzasidan kengaytirilgan ma’lumot beruvchi hujjat qaysi?", options: ["Memorandum", "Ariza", "Ishonchnoma", "Kafolat xati"], correct: 0 },
+        { category: "Akademik yozuv", question: "Qaysi qatorda ilmiy uslubga xos gap berilgan?", options: ["“Fotosintez jarayonida organik moddalar sintezlanadi.”", "“Ona tilim — jon-u dilim.”", "“Ertaga havo issiq bo‘lishi mumkin.”", "“Iltimos, menga kitobni berib turing.”"], correct: 0 },
+        { category: "Akademik yozuv", question: "Muallif tomonidan yozilgan ilmiy maqolaning qisqacha mazmunini ko‘rsatadigan ish?", options: ["Annotatsiya", "Doston", "Hikoya", "Ertak"], correct: 0 },
+        { category: "Akademik yozuv", question: "Qaysi turdagi ilmiy-tadqiqiy ish doktorlik darajasini olishga asos bo‘ladi?", options: ["Dissertatsiya", "Referat", "Konspekt", "Ma’ruza"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy uslub nima?", options: ["Fan sohasida qo‘llanadigan aniq va mantiqiy uslub", "Bozordagi erkin so‘zlashuv", "Shoirlarning she’r yozish uslubi", "Hujjatlar yozish qolipi"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy tadqiqot ishining tuzilmaviy mantiqiy sxemasi nima?", options: ["Kirish, asosiy qism, xulosa, adabiyotlar", "Faqat rasmlar va jadvallar", "Faqat muallifning xotiralari", "Sarlavha va yakuniy gap"], correct: 0 },
+        { category: "Akademik yozuv", question: "Ilmiy tadqiq qilish deganda nima tushuniladi?", options: ["Yangi bilimlarni muntazam va tizimli o‘rganish", "Shunchaki gazeta mutolaa qilish", "Badiiy kitob o‘qib berish", "Tabiatga sayohat qilish"], correct: 0 },
+        { category: "Akademik yozuv", question: "“Hovuzning qirg‘oqlarida hosil bo‘lgan yupqa muz...” Parchasi qaysi matnga xos?", options: ["Badiiy matnga", "Rasmiy matnga", "Diplomatik matnga", "Ilmiy-texnik matnga"], correct: 0 }
+    ];
 
     async function loadDB() {
         try {
             const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
-            fullDB = await r.json();
-            const cats = [...new Set(fullDB.map(x => x.category))];
-            categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-        } catch(e) { console.error("DB xatosi"); }
-    }
-
-    // YUKLASHDA QOTMASLIGI UCHUN YANGI MANTIQ
-    async function processRobust() {
-        const file = fileInput.files[0]; const cat = fileCat.value.trim();
-        if(!file || !cat) return alert("Ma'lumotlarni to'ldiring!");
-        
-        fileBtn.disabled = true;
-        pBox.style.display = 'block';
-        pStatus.innerText = "Fayl tahlil qilinmoqda...";
-
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            try {
-                const res = await mammoth.extractRawText({ arrayBuffer: e.target.result });
-                const text = res.value;
-                const qs = [];
-                
-                // Faylingizdagi +++++ va ===== bo'yicha tahlil
-                const blocks = text.split('+++++').map(b => b.trim()).filter(b => b.length > 10);
-                
-                for(let b of blocks) {
-                    const parts = b.split('=====');
-                    const cleanParts = parts.map(p => p.trim()).filter(p => p.length > 0);
-                    if(cleanParts.length >= 2) {
-                        // Savol birinchi qatorda, variantlar keyingi qatorlarda
-                        const question = cleanParts[0];
-                        const options = cleanParts.slice(1).filter(o => o.length > 0);
-                        
-                        if(options.length >= 2) {
-                            qs.push({ category: cat, question, options: options.slice(0,4), correct: 0 });
-                        }
-                    }
-                }
-                
-                if(qs.length === 0) throw new Error("Formatda xatolik: +++++ yoki ===== belgilari topilmadi.");
-                
-                // BAZAGA BO'LIB YUKLASH
-                await uploadChunks(qs);
-
-            } catch(err) { alert(err.message); resetUI(); }
-        };
-        reader.readAsArrayBuffer(file);
-    }
-
-    async function uploadChunks(qs) {
-        const size = 5; // 5 tadan yuklaymiz (eng xavfsiz va qotmaydigan tezlik)
-        for (let i = 0; i < qs.length; i += size) {
-            const chunk = qs.slice(i, i + size);
-            const res = await fetch(`${SB_URL}/rest/v1/test`, { 
-                method: "POST", 
-                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, 
-                body: JSON.stringify(chunk) 
-            });
+            const remoteData = await r.json();
             
-            if(!res.ok) throw new Error("Tarmoq xatosi! Internetni tekshiring.");
+            // Supabase ma'lumotlari va statik Akademik yozuv ma'lumotlarini birlashtirish
+            fullDB = [...remoteData, ...akademikYozuvStatic];
             
-            let progress = ((i + chunk.length) / qs.length) * 100;
-            pBar.style.width = progress + "%";
-            pStatus.innerText = `Bazaga yozilmoqda: ${Math.round(progress)}%`;
-            
-            // Supabase "dam olishi" uchun 200ms kutamiz
-            await new Promise(r => setTimeout(r, 200));
+            renderCategories();
+        } catch (e) { 
+            console.error("Xato:", e); 
+            // Agar internet bo'lmasa yoki xato bo'lsa faqat statik ma'lumotni yuklash
+            fullDB = [...akademikYozuvStatic];
+            renderCategories();
         }
-        alert("Muvaffaqiyatli yuklandi!");
-        location.reload();
     }
 
-    function resetUI() { fileBtn.disabled = false; pBox.style.display = 'none'; pStatus.innerText = ""; }
+    function renderCategories() {
+        const cats = [...new Set(fullDB.map(x => x.category))];
+        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
 
-    let quiz = [], current = 0, score = 0;
+        adminCategoryList.innerHTML = cats.map(cat => {
+            const catQs = fullDB.filter(x => x.category === cat);
+            const safeId = cat.replace(/[^a-z0-9]/gi, '');
+            return `
+                <div class="admin-item">
+                    <div class="admin-item-header">
+                        <span onclick="toggleQs('${safeId}')">📁 <b>${cat}</b> (${catQs.length})</span>
+                    </div>
+                    <div id="qs-${safeId}" class="q-list hidden">
+                        ${catQs.map(q => `
+                            <div class="q-item">
+                                <span>${q.question.substring(0,40)}...</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
+    function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
+    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol xato!"); }
+
     function startTest() {
-        const cat = categorySelect.value; if(!cat) return alert("Tanlang!");
-        quiz = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
-        startPage.classList.add('hidden'); quizPage.classList.remove('hidden');
-        showQuestion();
+        const cat = categorySelect.value;
+        if(!cat) return alert("Bo'limni tanlang!");
+        
+        quizData = fullDB.filter(x => x.category === cat);
+        // Savollarni aralashtirish
+        quizData.sort(() => Math.random() - 0.5);
+        
+        startPage.classList.add('hidden');
+        quizPage.classList.remove('hidden');
+        currentIdx = 0;
+        score = 0;
+        userChoices = [];
+        showQ();
     }
 
-    function showQuestion() {
-        const q = quiz[current];
-        qCount.innerText = `Savol: ${current + 1} / ${quiz.length}`;
-        qText.innerText = q.question;
+    function showQ() {
+        const q = quizData[currentIdx];
+        progressText.innerText = `Savol: ${currentIdx + 1} / ${quizData.length}`;
+        scoreText.innerText = `To'g'ri: ${score}`;
+        questionText.innerText = q.question;
         optionsBox.innerHTML = "";
+
+        let originalOpts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
         
-        let shuffled = q.options.map((t, i) => ({ t, ok: i === q.correct })).sort(() => Math.random() - 0.5);
-        shuffled.forEach((o, idx) => {
+        // VARIANTLARNI ARALASHTIRISH (Har ishlaganda har xil chiqishi uchun)
+        let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
+        mappedOpts.sort(() => Math.random() - 0.5);
+
+        mappedOpts.forEach((opt, i) => {
             const b = document.createElement('button');
             b.className = "opt-btn";
-            b.innerHTML = `<b>${["A","B","C","D"][idx]})</b> ${o.t}`;
-            b.onclick = () => { if(o.ok) score++; current++; current < quiz.length ? showQuestion() : finish(); };
+            b.innerHTML = `<span style="font-weight:bold; color:var(--accent); margin-right:15px;">${LETTERS[i]})</span> ${opt.txt}`;
+            b.onclick = () => {
+                userChoices.push({ choice: opt.originalIdx, mappedAs: i, allOptions: mappedOpts });
+                if(opt.originalIdx === q.correct) score++;
+                currentIdx++;
+                currentIdx < quizData.length ? showQ() : finish();
+            };
             optionsBox.appendChild(b);
         });
     }
 
     function finish() {
-        quizPage.classList.add('hidden'); resultPage.classList.remove('hidden');
-        scoreDisplay.innerText = `Natija: ${score} / ${quiz.length}`;
+        quizPage.classList.add('hidden');
+        resultPage.classList.remove('hidden');
+        scoreDisplay.innerText = `${score} / ${quizData.length}`;
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    }
+
+    function showAnalysis() {
+        analysisBox.classList.toggle('hidden');
+        analysisList.innerHTML = quizData.map((q, i) => {
+            const userObj = userChoices[i];
+            const isCorrect = userObj.choice === q.correct;
+            let originalOpts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
+            
+            return `
+                <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
+                    <b>${i+1}. ${q.question}</b><br>
+                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">
+                        Sizning javobingiz: ${originalOpts[userObj.choice]}
+                    </small><br>
+                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri javob: ${originalOpts[q.correct]}</small>` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function restartTest() { 
+        currentIdx = 0; score = 0; userChoices = []; 
+        resultPage.classList.add('hidden'); 
+        analysisBox.classList.add('hidden'); 
+        quizPage.classList.remove('hidden'); 
+        startTest(); 
+    }
+
+    function resetForm() {
+        editId.value = ""; inQ.value = ""; inA.value = ""; inB.value = ""; inC.value = ""; inD.value = ""; inCorrect.value = "";
+        formTitle.innerText = "Yangi savol qo'shish";
+        cancelEdit.classList.add('hidden');
+        saveBtn.innerText = "Saqlash";
     }
 
     loadDB();
