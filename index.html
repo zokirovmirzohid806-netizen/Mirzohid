@@ -20,9 +20,7 @@
             color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
         }
         .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
-        main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
         
-        /* ADMIN PANEL - CHAP TOMONDA */
         #adminAside {
             position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
             background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
@@ -30,7 +28,7 @@
         }
         #adminAside.open { left: 0; }
 
-        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 100%; max-width: 800px; }
         
         button { cursor: pointer; border: none; font-weight: 600; transition: 0.3s; }
         .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; padding: 12px 20px; border-radius: 12px; }
@@ -38,11 +36,14 @@
         .btn-danger { background: var(--danger); color: white; padding: 8px 15px; border-radius: 10px; }
         .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 10px 15px; border-radius: 10px; }
         
-        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; }
         
         .pdf-box { margin-top: 25px; padding: 20px; border: 2px dashed var(--purple); border-radius: 20px; background: rgba(139, 92, 246, 0.08); }
         .hidden { display: none !important; }
         .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; text-align: left; }
+
+        footer { margin-top: 50px; text-align: center; border-top: 1px solid var(--glass-border); padding-top: 20px; width: 100%; max-width: 800px; }
+        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -62,7 +63,7 @@
 
     <div id="adminContent" class="hidden">
         <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; border: 1px solid var(--glass-border);">
-            <h4 style="margin:0 0 10px 0; color: var(--accent);">Savol qo'shish</h4>
+            <h4 style="margin:0 0 10px 0; color: var(--accent);">Yakkalik savol qo'shish</h4>
             <input id="inCat" placeholder="Bo'lim nomi">
             <textarea id="inQ" placeholder="Savol matni"></textarea>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
@@ -74,15 +75,13 @@
         </div>
 
         <div class="pdf-box">
-            <h4 style="margin:0 0 10px 0; color: var(--purple);">PDF orqali yuklash</h4>
-            <p style="font-size: 12px; margin-bottom: 5px; color: var(--purple);">1. PDF uchun bo'lim kiriting:</p>
-            <input id="pdfCat" placeholder="Masalan: Fizika">
-            <p style="font-size: 12px; margin-bottom: 5px; color: var(--purple);">2. Faylni tanlang:</p>
-            <input type="file" id="pdfInput" accept=".pdf">
-            <button onclick="processPDF()" id="pdfBtn" class="btn-main" style="width:100%; margin-top:10px; background: var(--purple);">PDF-ni bazaga yuklash</button>
+            <h4 style="margin:0 0 10px 0; color: var(--purple);">Ommaviy PDF yuklash</h4>
+            <input id="pdfCat" placeholder="PDF uchun bo'lim kiriting">
+            <input type="file" id="pdfInput" accept=".pdf" style="margin-top:10px;">
+            <p style="font-size: 11px; color: var(--text-dim); margin-top:5px;">To'g'ri javob yoniga <b>++++</b> qo'ying</p>
+            <button onclick="processPDF()" id="pdfBtn" class="btn-success" style="background: var(--purple);">PDF-ni bazaga saqlash</button>
         </div>
-
-        <div id="adminCategoryList" style="margin-top: 20px;"></div>
+        <div id="adminCategoryList" style="margin-top: 20px; font-size: 13px; opacity: 0.7;"></div>
     </div>
 </div>
 
@@ -104,11 +103,15 @@
         </div>
 
         <div id="resultPage" class="hidden" style="text-align:center">
-            <h1 id="scoreDisplay" style="font-size: 40px;"></h1>
-            <button onclick="location.reload()" class="btn-main">Qayta boshlash</button>
+            <h1 id="scoreDisplay"></h1>
+            <button onclick="location.reload()" class="btn-main">Asosiy sahifa</button>
         </div>
     </section>
 </main>
+
+<footer>
+    Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a>
+</footer>
 
 <script>
     const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
@@ -118,180 +121,92 @@
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-    // ADMIN PANELNI OCHISH/YOPISH
     function toggleAdmin(show) {
         const panel = document.getElementById('adminAside');
-        if (show) panel.classList.add('open');
-        else panel.classList.remove('open');
+        show ? panel.classList.add('open') : panel.classList.remove('open');
     }
 
     async function loadDB() {
-        try {
-            const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { 
-                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
-            });
-            fullDB = await r.json();
-            renderCats();
-        } catch (e) { console.error("Yuklashda xato:", e); }
+        const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } });
+        fullDB = await r.json();
+        renderCats();
     }
 
     function renderCats() {
         const cats = [...new Set(fullDB.map(x => x.category))];
-        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + 
-            cats.map(c => `<option value="${c}">${c}</option>`).join('');
-        adminCategoryList.innerHTML = `<h3 style="font-size:14px; opacity:0.6;">Mavjud: ${cats.length} bo'lim</h3>`;
+        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        adminCategoryList.innerHTML = `Bo'limlar: ${cats.join(', ')}`;
     }
 
-    function login() {
-        if(adminPass.value === "zokirov0712") {
-            adminAuth.classList.add('hidden');
-            adminContent.classList.remove('hidden');
-        } else alert("Parol xato!");
-    }
+    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Xato!"); }
 
-    // SAVOLNI SAQLASH (MUHIM TUZATISH)
     async function saveData() {
-        const btn = document.getElementById('saveBtn');
-        const cat = document.getElementById('inCat').value.trim();
-        const q = document.getElementById('inQ').value.trim();
-        const corr = document.getElementById('inCorrect').value.toUpperCase().trim();
-
-        if(!cat || !q || !corr) return alert("Barcha maydonlarni to'ldiring!");
-
-        btn.innerText = "Saqlanmoqda...";
-        btn.disabled = true;
-
-        const data = {
-            category: cat,
-            question: q,
-            options: [
-                document.getElementById('inA').value,
-                document.getElementById('inB').value,
-                document.getElementById('inC').value,
-                document.getElementById('inD').value
-            ],
-            correct: LETTERS.indexOf(corr)
-        };
-
-        try {
-            const response = await fetch(`${SB_URL}/rest/v1/test`, {
-                method: "POST",
-                headers: {
-                    "apikey": SB_KEY,
-                    "Authorization": `Bearer ${SB_KEY}`,
-                    "Content-Type": "application/json",
-                    "Prefer": "return=minimal" // Supabase uchun muhim sarlavha
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert("Muvaffaqiyatli saqlandi!");
-                document.getElementById('inQ').value = "";
-                document.getElementById('inCorrect').value = "";
-                loadDB();
-            } else {
-                const errData = await response.json();
-                alert("Xato yuz berdi: " + (errData.message || "Baza bilan ulanishda xato"));
-            }
-        } catch (e) {
-            alert("Internet ulanishini tekshiring!");
-        } finally {
-            btn.innerText = "Bazaga saqlash";
-            btn.disabled = false;
-        }
+        const cat = inCat.value.trim(); const q = inQ.value.trim(); const corr = inCorrect.value.toUpperCase().trim();
+        if(!cat || !q || !corr) return alert("To'ldiring!");
+        const data = { category: cat, question: q, options: [inA.value, inB.value, inC.value, inD.value], correct: LETTERS.indexOf(corr) };
+        const res = await fetch(`${SB_URL}/rest/v1/test`, { method: "POST", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify(data) });
+        if(res.ok) { alert("Saqlandi!"); loadDB(); }
     }
 
-    // PDF TAHLILI
     async function processPDF() {
-        const file = pdfInput.files[0];
-        const cat = pdfCat.value.trim();
-        if(!file || !cat) return alert("Bo'lim nomi va PDF fayl shart!");
-
-        const btn = pdfBtn;
-        btn.innerText = "Tahlil qilinmoqda..."; btn.disabled = true;
-
+        const file = pdfInput.files[0]; const cat = pdfCat.value.trim();
+        if(!file || !cat) return alert("Bo'lim va fayl shart!");
+        pdfBtn.innerText = "Yuklanmoqda..."; pdfBtn.disabled = true;
         const reader = new FileReader();
         reader.onload = async function() {
             try {
                 const typedarray = new Uint8Array(this.result);
                 const pdf = await pdfjsLib.getDocument(typedarray).promise;
-                let fullText = "";
+                let text = "";
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i);
                     const content = await page.getTextContent();
-                    fullText += content.items.map(item => item.str).join(" ") + " ";
+                    text += content.items.map(item => item.str).join(" ") + " ";
                 }
-                
                 const questions = [];
-                const blocks = fullText.split(/\d+[\.\)]\s/).filter(b => b.includes('A)') && b.includes('B)'));
-
+                const blocks = text.split(/\d+[\.\)]\s/).filter(b => b.includes('A)') && b.includes('B)'));
                 blocks.forEach(block => {
                     let parts = block.split(/[A-D][\.\)]\s/);
                     if(parts.length >= 5) {
                         let opts = [parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim()];
-                        let correctIdx = opts.findIndex(o => o.includes('#'));
+                        // ENDI ++++ BELGISINI QIDIRADI
+                        let correctIdx = opts.findIndex(o => o.includes('++++'));
                         if(correctIdx !== -1) {
                             questions.push({
                                 category: cat,
                                 question: parts[0].trim(),
-                                options: opts.map(o => o.replace('#', '').trim()),
+                                options: opts.map(o => o.replace('++++', '').trim()),
                                 correct: correctIdx
                             });
                         }
                     }
                 });
-
                 if(questions.length > 0) {
-                    const res = await fetch(`${SB_URL}/rest/v1/test`, {
-                        method: "POST",
-                        headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" },
-                        body: JSON.stringify(questions)
-                    });
-                    if(res.ok) { alert(questions.length + " ta savol bazaga yuklandi!"); loadDB(); }
-                    else alert("Bazaga yuklashda xato!");
-                } else alert("Format xato (Variantda # belgisi yo'q)!");
-            } catch(e) { alert("PDF tahlilida xato!"); }
-            btn.innerText = "PDF-ni bazaga yuklash"; btn.disabled = false;
+                    const res = await fetch(`${SB_URL}/rest/v1/test`, { method: "POST", headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify(questions) });
+                    if(res.ok) { alert(questions.length + " ta savol saqlandi!"); loadDB(); }
+                } else alert("Format xato yoki ++++ topilmadi!");
+            } catch(e) { alert("Xato!"); }
+            finally { pdfBtn.innerText = "PDF-ni bazaga saqlash"; pdfBtn.disabled = false; }
         };
         reader.readAsArrayBuffer(file);
     }
 
-    // TEST QISMI
     let quizData = [], curIdx = 0, score = 0;
     function startTest() {
-        const cat = categorySelect.value;
-        if(!cat) return alert("Bo'lim tanlang!");
+        const cat = categorySelect.value; if(!cat) return alert("Tanlang!");
         quizData = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
-        curIdx = 0; score = 0;
-        startPage.classList.add('hidden'); quizPage.classList.remove('hidden');
-        showQ();
+        curIdx = 0; score = 0; startPage.classList.add('hidden'); quizPage.classList.remove('hidden'); showQ();
     }
-
     function showQ() {
-        const q = quizData[curIdx];
-        questionText.innerText = `${curIdx + 1}. ${q.question}`;
-        optionsBox.innerHTML = "";
-        let opts = Array.isArray(q.options) ? q.options : JSON.parse(q.options);
-        opts.forEach((txt, i) => {
-            const b = document.createElement('button');
-            b.className = "opt-btn";
+        const q = quizData[curIdx]; questionText.innerText = `${curIdx + 1}. ${q.question}`; optionsBox.innerHTML = "";
+        q.options.forEach((txt, i) => {
+            const b = document.createElement('button'); b.className = "opt-btn";
             b.innerHTML = `<b>${LETTERS[i]})</b> ${txt}`;
-            b.onclick = () => {
-                if(i === q.correct) score++;
-                curIdx++;
-                curIdx < quizData.length ? showQ() : finish();
-            };
+            b.onclick = () => { if(i === q.correct) score++; curIdx++; curIdx < quizData.length ? showQ() : finish(); };
             optionsBox.appendChild(b);
         });
     }
-
-    function finish() {
-        quizPage.classList.add('hidden'); resultPage.classList.remove('hidden');
-        scoreDisplay.innerText = `Natija: ${score} / ${quizData.length}`;
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    }
-
+    function finish() { quizPage.classList.add('hidden'); resultPage.classList.remove('hidden'); scoreDisplay.innerText = `Natija: ${score} / ${quizData.length}`; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
     loadDB();
 </script>
 </body>
