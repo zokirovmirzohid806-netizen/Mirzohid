@@ -3,74 +3,71 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Professional Test Portali — Admin Panel</title>
+    <title>Zokirov Mirzohid — Professional Test Portali</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         :root {
-            --bg: #050b18; --card: rgba(23, 32, 53, 0.98); --accent: #38bdf8;
+            --bg: #050b18; --card: rgba(23, 32, 53, 0.95); --accent: #38bdf8;
             --text-main: #ffffff; --text-dim: #94a3b8; --glass-border: rgba(255, 255, 255, 0.1);
-            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --success: #10b981; --danger: #ef4444; --purple: #8b5cf6;
         }
         body {
             margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18);
             color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
         }
-        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); width: 100%; max-width: 1000px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        
-        #adminAside {
-            position: fixed; right: -500px; top: 0; width: 450px; height: 100%;
-            background: #0f172a; border-left: 1px solid var(--glass-border);
-            padding: 25px; transition: 0.4s; z-index: 1000; overflow-y: auto; box-sizing: border-box;
-        }
-        #adminAside.open { right: 0; }
+        .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
+        .creator-header b { color: var(--accent); text-transform: uppercase; }
 
-        .admin-cat-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--glass-border); }
-        .cat-actions { display: flex; gap: 5px; margin-top: 10px; }
-        
-        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: #1e293b; color: white; }
-        button { cursor: pointer; border-radius: 10px; border: none; font-weight: 600; transition: 0.2s; }
-        .btn-main { background: var(--accent); color: #000; padding: 12px 20px; }
-        .btn-danger { background: var(--danger); color: #fff; padding: 8px 15px; }
-        .btn-warning { background: var(--warning); color: #000; padding: 8px 15px; }
-        .btn-success { background: var(--success); color: #fff; padding: 12px 20px; }
-        .btn-ghost { background: rgba(255,255,255,0.05); color: #fff; padding: 10px; }
-        
-        .opt-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; text-align: left; }
+        main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
+
+        /* ADMIN SIDEBAR */
+        #adminAside {
+            position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
+            background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
+            padding: 25px; transition: 0.4s; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
+        }
+        #adminAside.open { left: 0; }
+
+        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+
+        /* ADMIN INTERFACE */
+        .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
+        .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
+        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+
+        .btn-sm { padding: 6px 12px; font-size: 12px; margin-left: 5px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
+        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; text-align: left; font-size: 16px; }
+        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(8px); }
+
+        button { cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
+        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; }
+        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
+
+        footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
+        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .hidden { display: none !important; }
-        .q-item-admin { font-size: 12px; background: rgba(0,0,0,0.2); padding: 8px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
+        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
+        .analysis-card.correct { border-left: 5px solid var(--success); }
+        .analysis-card.wrong { border-left: 5px solid var(--danger); }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-        <h1>Test Portal</h1>
-        <button onclick="toggleAdmin()" class="btn-main">⚙️ Admin Panel</button>
-    </header>
-
-    <div id="startPage">
-        <label>Bo'limni tanlang:</label>
-        <select id="categorySelect"></select>
-        <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
-    </div>
-
-    <div id="quizPage" class="hidden">
-        <h2 id="questionText"></h2>
-        <div id="optionsBox"></div>
-    </div>
-
-    <div id="resultPage" class="hidden" style="text-align:center">
-        <h1 id="scoreDisplay"></h1>
-        <button onclick="location.reload()" class="btn-main">Asosiy sahifa</button>
-    </div>
+<div class="creator-header">
+    <h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4>
 </div>
 
 <div id="adminAside">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="color:var(--accent); margin:0;">Boshqaruv</h2>
-        <button onclick="toggleAdmin()" class="btn-danger">Yopish X</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <h2>Boshqaruv</h2>
+        <button onclick="toggleAdmin()" class="btn-danger btn-sm">Yopish X</button>
     </div>
 
     <div id="adminAuth">
@@ -79,165 +76,222 @@
     </div>
 
     <div id="adminContent" class="hidden">
-        <div id="editArea" style="background:rgba(56, 189, 248, 0.1); padding:15px; border-radius:15px; margin-bottom:20px;">
-            <h4 id="formTitle" style="margin-top:0;">Yangi savol qo'shish</h4>
-            <input id="inCat" placeholder="Bo'lim nomi">
-            <textarea id="inQ" placeholder="Savol matni"></textarea>
-            <input id="inA" placeholder="A variant (To'g'ri)">
-            <input id="inB" placeholder="B variant">
-            <input id="inC" placeholder="C variant">
-            <input id="inD" placeholder="D variant">
-            <button onclick="saveData()" class="btn-success" style="width:100%">Saqlash</button>
+        <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
+        <input type="hidden" id="editId">
+        <input id="inCat" placeholder="Bo'lim nomi">
+        <textarea id="inQ" placeholder="Savol matni"></textarea>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input id="inA" placeholder="A variant"> <input id="inB" placeholder="B variant">
+            <input id="inC" placeholder="C variant"> <input id="inD" placeholder="D variant">
         </div>
+        <input id="inCorrect" placeholder="To'g'ri javob (A, B, C yoki D)">
+        <button id="saveBtn" onclick="saveData()" class="btn-success" style="width:100%">Saqlash</button>
+        <button id="cancelEdit" onclick="resetForm()" class="btn-ghost hidden" style="width:100%; margin-top:5px;">Bekor qilish</button>
 
-        <h3>Bo'limlar va Savollar</h3>
+        <hr style="opacity:0.1; margin:20px 0;">
+        <h3>Mavjud bo'limlar:</h3>
         <div id="adminCategoryList"></div>
     </div>
 </div>
 
+<main class="wrap">
+    <section class="card">
+        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h1 style="margin:0;">Test Portal</h1>
+            <button onclick="toggleAdmin()" class="btn-ghost">⚙️ Admin Panel</button>
+        </header>
+
+        <div id="startPage">
+            <select id="categorySelect"><option>Yuklanmoqda...</option></select>
+            <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
+        </div>
+
+        <div id="quizPage" class="hidden">
+            <h2 id="questionText"></h2>
+            <div id="optionsBox"></div>
+        </div>
+
+        <div id="resultPage" class="hidden" style="text-align:center">
+            <h1 style="margin-bottom:0">Tabriklaymiz!</h1>
+            <p style="color:var(--text-dim)">Test yakunlandi</p>
+            <h1 id="scoreDisplay" style="font-size:60px; margin: 20px 0;"></h1>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <button onclick="showAnalysis()" class="btn-main" style="grid-column: span 2; background:var(--purple)">📊 Test Tahlili</button>
+                <button onclick="restartTest()" class="btn-main">🔄 Qayta yechish</button>
+                <button onclick="location.reload()" class="btn-ghost">📂 Bo'limni o'zgartirish</button>
+            </div>
+            <div id="analysisBox" class="hidden" style="margin-top:30px;"><div id="analysisList"></div></div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a> | 2026
+</footer>
+
 <script>
-    // Boshlang'ich savollar (Agar xotira bo'sh bo'lsa)
-    const initialData = [
-        { category: "Akademik yozuv", question: "Akademik yozuv fani nimani o'rgatadi?", options: ["Ilmiy matn yozish malakalarini", "So'zlashuvni", "She'riyatni", "Rasm chizishni"], correct: 0 },
-        { category: "Akademik yozuv", question: "“Hovuzning qirg‘oqlarida hosil bo‘lgan yupqa muz...” Parchasi qaysi matnga xos?", options: ["Badiiy matnga", "Rasmiy matnga", "Ilmiy matnga", "Publitsistik matnga"], correct: 0 }
-    ];
-
-    let fullDB = JSON.parse(localStorage.getItem('myTestDB')) || initialData;
-
-    function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
-    
-    function login() {
-        if(document.getElementById('adminPass').value === "zokirov0712") {
-            document.getElementById('adminAuth').classList.add('hidden');
-            document.getElementById('adminContent').classList.remove('hidden');
-            renderAdmin();
-        } else alert("Parol noto'g'ri!");
+    const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
+    const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
+    const LETTERS = ["A", "B", "C", "D"];
+    let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
+    // BAZADAN MA'LUMOT YUKLASH
+    async function loadDB() {
+        try {
+            const r = await fetch(${SB_URL}/rest/v1/test?select=*, { headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY} } });
+            fullDB = await r.json();
+            renderCategories();
+        } catch (e) { console.error("Xato:", e); }
     }
 
-    function renderAdmin() {
-        const list = document.getElementById('adminCategoryList');
-        list.innerHTML = "";
+    // ADMIN BO'LIMLARNI CHIQARISH
+    function renderCategories() {
         const cats = [...new Set(fullDB.map(x => x.category))];
+        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => <option value="${c}">${c}</option>).join('');
 
-        cats.forEach(cat => {
+        adminCategoryList.innerHTML = cats.map(cat => {
             const catQs = fullDB.filter(x => x.category === cat);
-            const div = document.createElement('div');
-            div.className = "admin-cat-card";
-            div.innerHTML = `
-                <b>📁 ${cat}</b> (${catQs.length} ta savol)
-                <div class="cat-actions">
-                    <button onclick="openCat('${cat}')" class="btn-warning">Tahrirlash</button>
-                    <button onclick="deleteCat('${cat}')" class="btn-danger">O'chirish</button>
-                </div>
-                <div id="qs-${cat.replace(/\s/g, '')}" class="hidden" style="margin-top:10px; border-top:1px solid #444; padding-top:10px;">
-                    ${catQs.map((q, idx) => `
-                        <div class="q-item-admin">
-                            <span>${idx+1}. ${q.question.substring(0,30)}...</span>
-                            <button onclick="deleteQuestion(${fullDB.indexOf(q)})" style="background:none; color:red; cursor:pointer;">❌</button>
+            return `
+                <div class="admin-item">
+                    <div class="admin-item-header">
+                        <span onclick="toggleQs('${cat.replace(/\s/g, '')}')">📁 <b>${cat}</b> (${catQs.length})</span>
+                        <div>
+                            <button onclick="editCategoryName('${cat}')" class="btn-ghost btn-sm">✏️</button>
+                            <button onclick="deleteCategory('${cat}')" class="btn-danger btn-sm">🗑</button>
                         </div>
-                    `).join('')}
+                    </div>
+                    <div id="qs-${cat.replace(/\s/g, '')}" class="q-list hidden">
+                        ${catQs.map(q => `
+                            <div class="q-item">
+                                <span onclick="editQuestion(${q.test})" style="cursor:pointer">${q.question.substring(0,30)}...</span>
+                                <button onclick="deleteQuestion(${q.test})" class="btn-danger btn-sm">X</button>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
-            list.appendChild(div);
+        }).join('');
+    }
+
+    function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
+    function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
+    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol xato!"); }
+
+    // SAQLASH (YANGI YOKI TAHRIRLANGAN)
+    async function saveData() {
+        const id = editId.value;
+        const body = {
+            category: inCat.value, question: inQ.value,
+            options: [inA.value, inB.value, inC.value, inD.value],
+            correct: LETTERS.indexOf(inCorrect.value.toUpperCase())
+        };
+
+        let url = `${SB_URL}/rest/v1/test`;
+        let method = "POST";
+        if(id) { url += ?test=eq.${id}; method = "PATCH"; }
+
+        const r = await fetch(url, {
+            method: method,
+            headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY}, "Content-Type": "application/json", "Prefer": "return=minimal" },
+            body: JSON.stringify(body)
         });
-        updateSelects();
+        if(r.ok) { alert("Saqlandi!"); resetForm(); loadDB(); }
     }
 
-    function openCat(cat) {
-        document.getElementById(`qs-${cat.replace(/\s/g, '')}`).classList.toggle('hidden');
-        document.getElementById('inCat').value = cat;
+    function editQuestion(id) {
+        const q = fullDB.find(x => x.test === id);
+        editId.value = q.test;
+        inCat.value = q.category;
+        inQ.value = q.question;
+        const opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
+        inA.value = opts[0]; inB.value = opts[1]; inC.value = opts[2]; inD.value = opts[3];
+        inCorrect.value = LETTERS[q.correct];
+        formTitle.innerText = "Savolni tahrirlash";
+        cancelEdit.classList.remove('hidden');
+        saveBtn.innerText = "O'zgarishlarni saqlash";
+        adminAside.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    async function deleteQuestion(id) { if(confirm("Savolni o'chirishni xohlaysizmi?")) { await fetch(${SB_URL}/rest/v1/test?test=eq.${id}, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY} } }); loadDB(); } }
+    async function deleteCategory(cat) { if(confirm(${cat} bo'limini butunlay o'chirib tashlaysizmi?)) { await fetch(${SB_URL}/rest/v1/test?category=eq.${cat}, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY} } }); loadDB(); } }
+    async function editCategoryName(oldCat) {
+        const newCat = prompt("Yangi bo'lim nomi:", oldCat);
+        if(!newCat  newCat === oldCat) return;
+        await fetch(`${SB_URL}/rest/v1/test?category=eq.${oldCat}`, {
+            method: "PATCH",
+            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ category: newCat })
+        });
+        loadDB();
     }
 
-    function deleteCat(cat) {
-        if(confirm(`"${cat}" bo'limidagi barcha savollar o'chib ketadi. Rozimisiz?`)) {
-            fullDB = fullDB.filter(x => x.category !== cat);
-            saveDB();
-        }
+    function resetForm() {
+        editId.value = ""; inQ.value = ""; inA.value = ""; inB.value = ""; inC.value = ""; inD.value = ""; inCorrect.value = "";
+        formTitle.innerText = "Yangi savol qo'shish";
+        cancelEdit.classList.add('hidden');
+        saveBtn.innerText = "Saqlash";
     }
 
-    function deleteQuestion(index) {
-        fullDB.splice(index, 1);
-        saveDB();
-    }
-
-    function saveData() {
-        const cat = document.getElementById('inCat').value;
-        const q = document.getElementById('inQ').value;
-        const opts = [
-            document.getElementById('inA').value,
-            document.getElementById('inB').value,
-            document.getElementById('inC').value,
-            document.getElementById('inD').value
-        ];
-
-        if(!cat || !q || !opts[0] || !opts[1]) return alert("Ma'lumotlarni to'liq kiriting!");
-
-        fullDB.push({ category: cat, question: q, options: opts, correct: 0 });
-        saveDB();
-        alert("Savol saqlandi!");
-        
-        // Formani tozalash
-        document.getElementById('inQ').value = "";
-        document.getElementById('inA').value = "";
-        document.getElementById('inB').value = "";
-        document.getElementById('inC').value = "";
-        document.getElementById('inD').value = "";
-    }
-
-    function saveDB() {
-        localStorage.setItem('myTestDB', JSON.stringify(fullDB));
-        renderAdmin();
-    }
-
-    function updateSelects() {
-        const cats = [...new Set(fullDB.map(x => x.category))];
-        document.getElementById('categorySelect').innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
-    }
-
-    // TEST QISMI
-    let quiz = [], cur = 0, score = 0;
-
-    function startTest() {
-        const cat = document.getElementById('categorySelect').value;
-        quiz = fullDB.filter(x => x.category === cat).sort(() => Math.random() - 0.5);
-        if(quiz.length === 0) return alert("Bu bo'limda savollar yo'q!");
-        
-        document.getElementById('startPage').classList.add('hidden');
-        document.getElementById('quizPage').classList.remove('hidden');
+    // TESTNI BOSHLASH
+    async function startTest() {
+        const cat = categorySelect.value;
+        if(!cat) return alert("Bo'limni tanlang!");
+        quizData = fullDB.filter(x => x.category === cat);
+        // Savollarni aralashtirish
+        quizData.sort(() => Math.random() - 0.5);
+        startPage.classList.add('hidden');
+        quizPage.classList.remove('hidden');
         showQ();
     }
 
+    // SAVOLNI KO'RSATISH VA VARIANTLARNI ARALASHTIRISH
     function showQ() {
-        const q = quiz[cur];
-        document.getElementById('questionText').innerText = q.question;
-        const box = document.getElementById('optionsBox');
-        box.innerHTML = "";
+        const q = quizData[currentIdx];
+        questionText.innerText = `${currentIdx + 1}. ${q.question}`;
+        optionsBox.innerHTML = "";
 
-        // Variantlarni aralashtirish
-        let mapped = q.options.map((t, i) => ({t, i}));
-        mapped.sort(() => Math.random() - 0.5);
+        let originalOpts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
+        // Variantlarni obyektga o'girib aralashtirish
+        let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
+        mappedOpts.sort(() => Math.random() - 0.5);
 
-        mapped.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = "opt-btn";
-            btn.innerText = opt.t;
-            btn.onclick = () => {
-                if(opt.i === q.correct) score++;
-                cur++;
-                cur < quiz.length ? showQ() : finish();
+        mappedOpts.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = "opt-btn";
+            b.innerHTML = `<span style="font-weight:bold; color:var(--accent); margin-right:15px;">${LETTERS[i]})</span> ${opt.txt}`;
+            b.onclick = () => {
+                userChoices.push(opt.originalIdx);
+                if(opt.originalIdx === q.correct) score++;
+                currentIdx++;
+                currentIdx < quizData.length ? showQ() : finish();
             };
-            box.appendChild(btn);
+            optionsBox.appendChild(b);
         });
     }
 
     function finish() {
-        document.getElementById('quizPage').classList.add('hidden');
-        document.getElementById('resultPage').classList.remove('hidden');
-        document.getElementById('scoreDisplay').innerText = `Natija: ${score} / ${quiz.length}`;
-        confetti({ particleCount: 150, spread: 70 });
+        quizPage.classList.add('hidden');
+        resultPage.classList.remove('hidden');
+        scoreDisplay.innerText = `${score} / ${quizData.length}`;
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
-    updateSelects();
+    function showAnalysis() {
+        analysisBox.classList.toggle('hidden');
+        analysisList.innerHTML = quizData.map((q, i) => {
+            const isCorrect = userChoices[i] === q.correct;
+            let opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
+            return `
+                <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
+                    <b>${i+1}. ${q.question}</b><br>
+                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">Siz: ${LETTERS[userChoices[i]]  '?'}) ${opts[userChoices[i]] || 'Belgilanmagan'}</small><br>
+                    ${!isCorrect ? <small style="color:var(--success)">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small> : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function restartTest() { currentIdx = 0; score = 0; userChoices = []; resultPage.classList.add('hidden'); analysisBox.classList.add('hidden'); quizPage.classList.remove('hidden'); startTest(); }
+
+    loadDB();
 </script>
 </body>
 </html>
