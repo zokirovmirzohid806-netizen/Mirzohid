@@ -134,10 +134,13 @@
     const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
     const LETTERS = ["A", "B", "C", "D"];
     let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
+
     // BAZADAN MA'LUMOT YUKLASH
     async function loadDB() {
         try {
-            const r = await fetch(${SB_URL}/rest/v1/test?select=*, { headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY} } });
+            const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { 
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
+            });
             fullDB = await r.json();
             renderCategories();
         } catch (e) { console.error("Xato:", e); }
@@ -146,20 +149,25 @@
     // ADMIN BO'LIMLARNI CHIQARISH
     function renderCategories() {
         const cats = [...new Set(fullDB.map(x => x.category))];
-        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + cats.map(c => <option value="${c}">${c}</option>).join('');
+        const categorySelect = document.getElementById('categorySelect');
+        const adminCategoryList = document.getElementById('adminCategoryList');
+
+        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + 
+            cats.map(c => `<option value="${c}">${c}</option>`).join('');
 
         adminCategoryList.innerHTML = cats.map(cat => {
             const catQs = fullDB.filter(x => x.category === cat);
+            const safeId = cat.replace(/\s/g, '_'); 
             return `
                 <div class="admin-item">
                     <div class="admin-item-header">
-                        <span onclick="toggleQs('${cat.replace(/\s/g, '')}')">📁 <b>${cat}</b> (${catQs.length})</span>
+                        <span onclick="toggleQs('${safeId}')">📁 <b>${cat}</b> (${catQs.length})</span>
                         <div>
                             <button onclick="editCategoryName('${cat}')" class="btn-ghost btn-sm">✏️</button>
                             <button onclick="deleteCategory('${cat}')" class="btn-danger btn-sm">🗑</button>
                         </div>
                     </div>
-                    <div id="qs-${cat.replace(/\s/g, '')}" class="q-list hidden">
+                    <div id="qs-${safeId}" class="q-list hidden">
                         ${catQs.map(q => `
                             <div class="q-item">
                                 <span onclick="editQuestion(${q.test})" style="cursor:pointer">${q.question.substring(0,30)}...</span>
@@ -174,24 +182,46 @@
 
     function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
     function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
-    function login() { if(adminPass.value === "zokirov0712") { adminAuth.classList.add('hidden'); adminContent.classList.remove('hidden'); } else alert("Parol xato!"); }
+    
+    function login() { 
+        const pass = document.getElementById('adminPass').value;
+        if(pass === "zokirov0712") { 
+            document.getElementById('adminAuth').classList.add('hidden'); 
+            document.getElementById('adminContent').classList.remove('hidden'); 
+        } else {
+            alert("Parol xato!"); 
+        }
+    }
 
     // SAQLASH (YANGI YOKI TAHRIRLANGAN)
     async function saveData() {
-        const id = editId.value;
+        const id = document.getElementById('editId').value;
         const body = {
-            category: inCat.value, question: inQ.value,
-            options: [inA.value, inB.value, inC.value, inD.value],
-            correct: LETTERS.indexOf(inCorrect.value.toUpperCase())
+            category: document.getElementById('inCat').value, 
+            question: document.getElementById('inQ').value,
+            options: [
+                document.getElementById('inA').value, 
+                document.getElementById('inB').value, 
+                document.getElementById('inC').value, 
+                document.getElementById('inD').value
+            ],
+            correct: LETTERS.indexOf(document.getElementById('inCorrect').value.toUpperCase())
         };
+
+        if(!body.category || !body.question || body.correct === -1) return alert("Barcha maydonlarni to'ldiring!");
 
         let url = `${SB_URL}/rest/v1/test`;
         let method = "POST";
-        if(id) { url += ?test=eq.${id}; method = "PATCH"; }
+        if(id) { url += `?test=eq.${id}`; method = "PATCH"; }
 
         const r = await fetch(url, {
             method: method,
-            headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY}, "Content-Type": "application/json", "Prefer": "return=minimal" },
+            headers: { 
+                "apikey": SB_KEY, 
+                "Authorization": `Bearer ${SB_KEY}`, 
+                "Content-Type": "application/json", 
+                "Prefer": "return=minimal" 
+            },
             body: JSON.stringify(body)
         });
         if(r.ok) { alert("Saqlandi!"); resetForm(); loadDB(); }
@@ -199,22 +229,45 @@
 
     function editQuestion(id) {
         const q = fullDB.find(x => x.test === id);
-        editId.value = q.test;
-        inCat.value = q.category;
-        inQ.value = q.question;
+        document.getElementById('editId').value = q.test;
+        document.getElementById('inCat').value = q.category;
+        document.getElementById('inQ').value = q.question;
         const opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-        inA.value = opts[0]; inB.value = opts[1]; inC.value = opts[2]; inD.value = opts[3];
-        inCorrect.value = LETTERS[q.correct];
-        formTitle.innerText = "Savolni tahrirlash";
-        cancelEdit.classList.remove('hidden');
-        saveBtn.innerText = "O'zgarishlarni saqlash";
-        adminAside.scrollTo({top: 0, behavior: 'smooth'});
+        document.getElementById('inA').value = opts[0];
+        document.getElementById('inB').value = opts[1];
+        document.getElementById('inC').value = opts[2];
+        document.getElementById('inD').value = opts[3];
+        document.getElementById('inCorrect').value = LETTERS[q.correct];
+        
+        document.getElementById('formTitle').innerText = "Savolni tahrirlash";
+        document.getElementById('cancelEdit').classList.remove('hidden');
+        document.getElementById('saveBtn').innerText = "O'zgarishlarni saqlash";
+        document.getElementById('adminAside').scrollTo({top: 0, behavior: 'smooth'});
     }
-    async function deleteQuestion(id) { if(confirm("Savolni o'chirishni xohlaysizmi?")) { await fetch(${SB_URL}/rest/v1/test?test=eq.${id}, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY} } }); loadDB(); } }
-    async function deleteCategory(cat) { if(confirm(${cat} bo'limini butunlay o'chirib tashlaysizmi?)) { await fetch(${SB_URL}/rest/v1/test?category=eq.${cat}, { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": Bearer ${SB_KEY} } }); loadDB(); } }
+
+    async function deleteQuestion(id) { 
+        if(confirm("Savolni o'chirishni xohlaysizmi?")) { 
+            await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { 
+                method: "DELETE", 
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
+            }); 
+            loadDB(); 
+        } 
+    }
+
+    async function deleteCategory(cat) { 
+        if(confirm(`${cat} bo'limini butunlay o'chirib tashlaysizmi?`)) { 
+            await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { 
+                method: "DELETE", 
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
+            }); 
+            loadDB(); 
+        } 
+    }
+
     async function editCategoryName(oldCat) {
         const newCat = prompt("Yangi bo'lim nomi:", oldCat);
-        if(!newCat  newCat === oldCat) return;
+        if(!newCat || newCat === oldCat) return;
         await fetch(`${SB_URL}/rest/v1/test?category=eq.${oldCat}`, {
             method: "PATCH",
             headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
@@ -224,32 +277,38 @@
     }
 
     function resetForm() {
-        editId.value = ""; inQ.value = ""; inA.value = ""; inB.value = ""; inC.value = ""; inD.value = ""; inCorrect.value = "";
-        formTitle.innerText = "Yangi savol qo'shish";
-        cancelEdit.classList.add('hidden');
-        saveBtn.innerText = "Saqlash";
+        document.getElementById('editId').value = ""; 
+        document.getElementById('inQ').value = ""; 
+        document.getElementById('inA').value = ""; 
+        document.getElementById('inB').value = ""; 
+        document.getElementById('inC').value = ""; 
+        document.getElementById('inD').value = ""; 
+        document.getElementById('inCorrect').value = "";
+        document.getElementById('formTitle').innerText = "Yangi savol qo'shish";
+        document.getElementById('cancelEdit').classList.add('hidden');
+        document.getElementById('saveBtn').innerText = "Saqlash";
     }
 
-    // TESTNI BOSHLASH
+    // TEST FUNKSIYALARI
     async function startTest() {
-        const cat = categorySelect.value;
+        const cat = document.getElementById('categorySelect').value;
         if(!cat) return alert("Bo'limni tanlang!");
         quizData = fullDB.filter(x => x.category === cat);
-        // Savollarni aralashtirish
         quizData.sort(() => Math.random() - 0.5);
-        startPage.classList.add('hidden');
-        quizPage.classList.remove('hidden');
+        currentIdx = 0; score = 0; userChoices = [];
+        document.getElementById('startPage').classList.add('hidden');
+        document.getElementById('resultPage').classList.add('hidden');
+        document.getElementById('quizPage').classList.remove('hidden');
         showQ();
     }
 
-    // SAVOLNI KO'RSATISH VA VARIANTLARNI ARALASHTIRISH
     function showQ() {
         const q = quizData[currentIdx];
-        questionText.innerText = `${currentIdx + 1}. ${q.question}`;
-        optionsBox.innerHTML = "";
+        document.getElementById('questionText').innerText = `${currentIdx + 1}. ${q.question}`;
+        const box = document.getElementById('optionsBox');
+        box.innerHTML = "";
 
         let originalOpts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-        // Variantlarni obyektga o'girib aralashtirish
         let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
         mappedOpts.sort(() => Math.random() - 0.5);
 
@@ -263,33 +322,36 @@
                 currentIdx++;
                 currentIdx < quizData.length ? showQ() : finish();
             };
-            optionsBox.appendChild(b);
+            box.appendChild(b);
         });
     }
 
     function finish() {
-        quizPage.classList.add('hidden');
-        resultPage.classList.remove('hidden');
-        scoreDisplay.innerText = `${score} / ${quizData.length}`;
+        document.getElementById('quizPage').classList.add('hidden');
+        document.getElementById('resultPage').classList.remove('hidden');
+        document.getElementById('scoreDisplay').innerText = `${score} / ${quizData.length}`;
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
     function showAnalysis() {
+        const analysisBox = document.getElementById('analysisBox');
         analysisBox.classList.toggle('hidden');
-        analysisList.innerHTML = quizData.map((q, i) => {
+        document.getElementById('analysisList').innerHTML = quizData.map((q, i) => {
             const isCorrect = userChoices[i] === q.correct;
             let opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
             return `
                 <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
                     <b>${i+1}. ${q.question}</b><br>
-                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">Siz: ${LETTERS[userChoices[i]]  '?'}) ${opts[userChoices[i]] || 'Belgilanmagan'}</small><br>
-                    ${!isCorrect ? <small style="color:var(--success)">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small> : ''}
+                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">Siz: ${LETTERS[userChoices[i]] || '?'}) ${opts[userChoices[i]] || 'Belgilanmagan'}</small><br>
+                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small>` : ''}
                 </div>
             `;
         }).join('');
     }
 
-    function restartTest() { currentIdx = 0; score = 0; userChoices = []; resultPage.classList.add('hidden'); analysisBox.classList.add('hidden'); quizPage.classList.remove('hidden'); startTest(); }
+    function restartTest() { 
+        startTest(); 
+    }
 
     loadDB();
 </script>
