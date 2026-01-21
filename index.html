@@ -1,359 +1,572 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zokirov Mirzohid — Professional Test Portali</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademik Yozuv - Test Dasturi</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        :root {
-            --bg: #050b18; --card: rgba(23, 32, 53, 0.95); --accent: #38bdf8;
-            --text-main: #ffffff; --text-dim: #94a3b8; --glass-border: rgba(255, 255, 255, 0.1);
-            --success: #10b981; --danger: #ef4444; --purple: #8b5cf6;
-        }
-        body {
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e293b, #0f172a, #050b18);
-            color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
-        }
-        .creator-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; width: 100%; max-width: 1100px; }
-        .creator-header b { color: var(--accent); text-transform: uppercase; }
+        /* ASOSIY STYLES - O'zgarishsiz qoldirildi */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; position: relative; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .developer { font-size: 14px; opacity: 0.9; }
+        
+        /* ADMIN TUGMASI */
+        .admin-btn { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; }
+        .admin-btn:hover { background: rgba(255,255,255,0.4); }
 
-        main.wrap { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr; gap: 20px; position: relative; flex: 1; }
+        /* UPLOAD SECTION - ADMIN UCHUN */
+        .upload-section { padding: 40px; text-align: center; display: none; }
+        .upload-area { border: 3px dashed #667eea; border-radius: 15px; padding: 40px; margin: 20px 0; cursor: pointer; transition: all 0.3s; background: #f8f9fa; }
+        .upload-area:hover { background: #e8f0fe; border-color: #764ba2; }
+        .upload-area.dragover { background: #e8f0fe; border-color: #764ba2; transform: scale(1.02); }
+        .upload-icon { font-size: 48px; margin-bottom: 10px; }
+        .upload-text { font-size: 16px; color: #333; margin-bottom: 5px; }
+        #fileInput { display: none; }
 
-        /* ADMIN SIDEBAR */
-        #adminAside {
-            position: fixed; left: -450px; top: 0; width: 420px; height: 100%;
-            background: var(--card); backdrop-filter: blur(35px); border-right: 1px solid var(--glass-border);
-            padding: 25px; transition: 0.4s; z-index: 1000; box-shadow: 20px 0 50px rgba(0,0,0,0.5); overflow-y: auto; box-sizing: border-box;
-        }
-        #adminAside.open { left: 0; }
+        /* LOGIN PANEL */
+        .login-panel { display: none; padding: 40px; text-align: center; }
+        .input-group { margin-bottom: 20px; }
+        .custom-input { padding: 12px 20px; border: 2px solid #e0e0e0; border-radius: 10px; width: 80%; max-width: 300px; font-size: 16px; outline: none; transition: 0.3s; }
+        .custom-input:focus { border-color: #667eea; }
 
-        .card { background: var(--card); backdrop-filter: blur(25px); border-radius: 28px; padding: 40px; border: 1px solid var(--glass-border); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        /* MENYU VA OYNALAR */
+        .main-menu { padding: 40px; display: block; } 
+        .menu-title { text-align: center; color: #333; margin-bottom: 30px; font-size: 24px; }
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .category-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 30px 20px; border-radius: 15px; cursor: pointer; font-size: 18px; font-weight: bold; transition: transform 0.3s, box-shadow 0.3s; position: relative; }
+        .category-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
+        
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-size: 14px; display: none; z-index: 10; }
+        .category-btn:hover .delete-btn.admin-mode { display: block; }
 
-        /* ADMIN INTERFACE */
-        .admin-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--glass-border); }
-        .admin-item-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .q-list { margin-top: 10px; padding-left: 15px; border-left: 2px solid var(--accent); }
-        .q-item { font-size: 13px; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        /* QUIZ CONTAINER */
+        .quiz-container { padding: 40px; display: none; }
+        .progress-bar { background: #e0e0e0; height: 10px; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s; }
+        .question-card { background: #f8f9fa; padding: 30px; border-radius: 15px; margin-bottom: 30px; }
+        .question-number { color: #667eea; font-weight: bold; margin-bottom: 15px; font-size: 16px; }
+        .question-text { font-size: 20px; color: #333; margin-bottom: 25px; line-height: 1.6; }
+        .options { display: flex; flex-direction: column; gap: 15px; }
+        .option { background: white; padding: 20px; border-radius: 10px; cursor: pointer; border: 2px solid #e0e0e0; transition: all 0.3s; font-size: 16px; }
+        .option:hover { border-color: #667eea; transform: translateX(5px); }
+        .option.selected { border-color: #667eea; background: #f0f4ff; }
+        .option.correct { border-color: #4caf50; background: #e8f5e9; }
+        .option.wrong { border-color: #f44336; background: #ffebee; }
+        
+        /* TUGMALAR */
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: transform 0.3s; margin: 10px; }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary { background: #6c757d; }
+        .btn-danger { background: #dc3545; background-image: none; }
 
-        .btn-sm { padding: 6px 12px; font-size: 12px; margin-left: 5px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
-        .opt-btn { display: flex; width: 100%; padding: 18px; margin: 10px 0; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: white; cursor: pointer; transition: 0.3s; align-items: center; text-align: left; font-size: 16px; }
-        .opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent); transform: translateX(8px); }
-
-        button { cursor: pointer; padding: 12px 20px; border-radius: 12px; border: none; font-weight: 600; transition: 0.3s; }
-        .btn-main { background: linear-gradient(135deg, #38bdf8, #2563eb); color: white; }
-        .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-success { background: var(--success); color: white; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-family: inherit; }
-
-        footer { margin-top: 40px; text-align: center; color: var(--text-dim); font-size: 14px; padding-bottom: 20px; }
-        footer a { color: var(--accent); text-decoration: none; font-weight: bold; }
-        .hidden { display: none !important; }
-        .analysis-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
-        .analysis-card.correct { border-left: 5px solid var(--success); }
-        .analysis-card.wrong { border-left: 5px solid var(--danger); }
+        .controls { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .results { display: none; padding: 40px; text-align: center; }
+        .score-display { font-size: 48px; color: #667eea; font-weight: bold; margin: 30px 0; }
+        .result-details { background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 20px 0; max-height: 500px; overflow-y: auto; }
+        .result-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #e0e0e0; font-size: 18px; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; color: #666; }
+        .footer a { color: #667eea; text-decoration: none; font-weight: bold; }
+        .feedback { display: none; margin-top: 10px; padding: 10px; border-radius: 5px; font-weight: bold; }
+        .feedback.correct { background: #e8f5e9; color: #2e7d32; }
+        .feedback.wrong { background: #ffebee; color: #c62828; }
+        .file-info { background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 20px 0; color: #2e7d32; }
+        .error-message { background: #ffebee; padding: 15px; border-radius: 10px; margin: 20px 0; color: #c62828; }
+        
+        .empty-state { text-align: center; color: #888; padding: 20px; }
     </style>
 </head>
 <body>
-
-<div class="creator-header">
-    <h4>Dastur yaratuvchisi: <b>Zokirov Mirzohid</b></h4>
-</div>
-
-<div id="adminAside">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-        <h2>Boshqaruv</h2>
-        <button onclick="toggleAdmin()" class="btn-danger btn-sm">Yopish X</button>
-    </div>
-
-    <div id="adminAuth">
-        <input type="password" id="adminPass" placeholder="Admin paroli">
-        <button onclick="login()" class="btn-main" style="width:100%">Kirish</button>
-    </div>
-
-    <div id="adminContent" class="hidden">
-        <div id="formTitle" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">Yangi savol qo'shish</div>
-        <input type="hidden" id="editId">
-        <input id="inCat" placeholder="Bo'lim nomi">
-        <textarea id="inQ" placeholder="Savol matni"></textarea>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-            <input id="inA" placeholder="A variant"> <input id="inB" placeholder="B variant">
-            <input id="inC" placeholder="C variant"> <input id="inD" placeholder="D variant">
-        </div>
-        <input id="inCorrect" placeholder="To'g'ri javob (A, B, C yoki D)">
-        <button id="saveBtn" onclick="saveData()" class="btn-success" style="width:100%">Saqlash</button>
-        <button id="cancelEdit" onclick="resetForm()" class="btn-ghost hidden" style="width:100%; margin-top:5px;">Bekor qilish</button>
-
-        <hr style="opacity:0.1; margin:20px 0;">
-        <h3>Mavjud bo'limlar:</h3>
-        <div id="adminCategoryList"></div>
-    </div>
-</div>
-
-<main class="wrap">
-    <section class="card">
-        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h1 style="margin:0;">Test Portal</h1>
-            <button onclick="toggleAdmin()" class="btn-ghost">⚙️ Admin Panel</button>
-        </header>
-
-        <div id="startPage">
-            <select id="categorySelect"><option>Yuklanmoqda...</option></select>
-            <button onclick="startTest()" class="btn-main" style="width:100%; margin-top:20px;">Testni boshlash</button>
+    <div class="container">
+        <div class="header">
+            <button class="admin-btn" onclick="toggleAdminLogin()">Admin Panel</button>
+            <h1>🎓 Akademik Yozuv Test Dasturi</h1>
+            <div class="developer">Dastur yaratuvchisi: Zokirov Mirzohid</div>
         </div>
 
-        <div id="quizPage" class="hidden">
-            <h2 id="questionText"></h2>
-            <div id="optionsBox"></div>
-        </div>
-
-        <div id="resultPage" class="hidden" style="text-align:center">
-            <h1 style="margin-bottom:0">Tabriklaymiz!</h1>
-            <p style="color:var(--text-dim)">Test yakunlandi</p>
-            <h1 id="scoreDisplay" style="font-size:60px; margin: 20px 0;"></h1>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button onclick="showAnalysis()" class="btn-main" style="grid-column: span 2; background:var(--purple)">📊 Test Tahlili</button>
-                <button onclick="restartTest()" class="btn-main">🔄 Qayta yechish</button>
-                <button onclick="location.reload()" class="btn-ghost">📂 Bo'limni o'zgartirish</button>
+        <div id="loginPanel" class="login-panel">
+            <h2 class="menu-title">Admin Tizimiga Kirish</h2>
+            <div class="input-group">
+                <input type="password" id="adminPassword" class="custom-input" placeholder="Parolni kiriting">
             </div>
-            <div id="analysisBox" class="hidden" style="margin-top:30px;"><div id="analysisList"></div></div>
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="hideLogin()">Bekor qilish</button>
+                <button class="btn" onclick="checkAdmin()">Kirish</button>
+            </div>
+            <div id="loginError" style="color: red; margin-top: 10px;"></div>
         </div>
-    </section>
-</main>
 
-<footer>
-    Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a> | 2026
-</footer>
+        <div id="adminDashboard" class="upload-section">
+            <h2 class="menu-title">Yangi Test Qo'shish</h2>
+            
+            <div class="input-group">
+                <input type="text" id="categoryName" class="custom-input" placeholder="Bo'lim nomini kiriting (masalan: Tarix 1-kitob)">
+            </div>
 
-<script>
-    const SB_URL = "https://liugseqxsxusozzasgqg.supabase.co";
-    const SB_KEY = "sb_publishable_TRSZsonJEx5BaNp-allZfg_DG-JJLMj";
-    const LETTERS = ["A", "B", "C", "D"];
-    let fullDB = [], quizData = [], currentIdx = 0, score = 0, userChoices = [];
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Faylni yuklash (.docx yoki .txt)</div>
+                <div class="upload-hint">Avval bo'lim nomini yozing</div>
+            </div>
+            <input type="file" id="fileInput" accept=".docx,.txt">
+            <div id="fileInfo"></div>
+            
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="logoutAdmin()">Chiqish</button>
+            </div>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <h3>Mavjud Bo'limlar (O'chirish uchun ustiga bosing)</h3>
+            <div class="category-grid" id="adminCategoryList" style="margin-top: 20px;"></div>
+        </div>
 
-    // BAZADAN MA'LUMOT YUKLASH
-    async function loadDB() {
-        try {
-            const r = await fetch(`${SB_URL}/rest/v1/test?select=*`, { 
-                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
-            });
-            fullDB = await r.json();
-            renderCategories();
-        } catch (e) { console.error("Xato:", e); }
-    }
-
-    // ADMIN BO'LIMLARNI CHIQARISH
-    function renderCategories() {
-        const cats = [...new Set(fullDB.map(x => x.category))];
-        const categorySelect = document.getElementById('categorySelect');
-        const adminCategoryList = document.getElementById('adminCategoryList');
-
-        categorySelect.innerHTML = '<option value="">Bo\'limni tanlang...</option>' + 
-            cats.map(c => `<option value="${c}">${c}</option>`).join('');
-
-        adminCategoryList.innerHTML = cats.map(cat => {
-            const catQs = fullDB.filter(x => x.category === cat);
-            const safeId = cat.replace(/\s/g, '_'); 
-            return `
-                <div class="admin-item">
-                    <div class="admin-item-header">
-                        <span onclick="toggleQs('${safeId}')">📁 <b>${cat}</b> (${catQs.length})</span>
-                        <div>
-                            <button onclick="editCategoryName('${cat}')" class="btn-ghost btn-sm">✏️</button>
-                            <button onclick="deleteCategory('${cat}')" class="btn-danger btn-sm">🗑</button>
-                        </div>
-                    </div>
-                    <div id="qs-${safeId}" class="q-list hidden">
-                        ${catQs.map(q => `
-                            <div class="q-item">
-                                <span onclick="editQuestion(${q.test})" style="cursor:pointer">${q.question.substring(0,30)}...</span>
-                                <button onclick="deleteQuestion(${q.test})" class="btn-danger btn-sm">X</button>
-                            </div>
-                        `).join('')}
-                    </div>
+        <div id="mainMenu" class="main-menu">
+            <h2 class="menu-title">Bo'limni tanlang</h2>
+            <div class="category-grid" id="categoryGrid">
                 </div>
-            `;
-        }).join('');
-    }
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>Hozircha testlar mavjud emas.</h3>
+                <p>Admin tomonidan test yuklanishini kuting.</p>
+            </div>
+        </div>
 
-    function toggleQs(id) { document.getElementById(`qs-${id}`).classList.toggle('hidden'); }
-    function toggleAdmin() { document.getElementById('adminAside').classList.toggle('open'); }
-    
-    function login() { 
-        const pass = document.getElementById('adminPass').value;
-        if(pass === "zokirov0712") { 
-            document.getElementById('adminAuth').classList.add('hidden'); 
-            document.getElementById('adminContent').classList.remove('hidden'); 
-        } else {
-            alert("Parol xato!"); 
+        <div id="subCategoryMenu" class="main-menu" style="display: none;">
+            <h2 class="menu-title" id="subCategoryTitle">Qismni tanlang</h2>
+            <div class="category-grid" id="subCategoryGrid"></div>
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="showMainMenu()">Orqaga</button>
+            </div>
+        </div>
+
+        <div id="quizContainer" class="quiz-container">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <div id="questionCard" class="question-card"></div>
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="showSubMenuFromQuiz()">Bo'limga qaytish</button>
+                <button id="nextBtn" class="btn" onclick="nextQuestion()">Keyingi savol</button>
+            </div>
+        </div>
+
+        <div id="results" class="results">
+            <h2>🎉 Test Yakunlandi!</h2>
+            <div class="score-display" id="scoreDisplay"></div>
+            <div class="result-details" id="resultDetails"></div>
+            <div class="controls">
+                <button class="btn" onclick="showSubMenuFromQuiz()">Qismlar menyusi</button>
+                <button class="btn" onclick="showAnalysis()">Test tahlili</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Murojaat uchun: <a href="https://t.me/zokirov_0712" target="_blank">@zokirov_0712</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script>
+        // GLOBAL O'ZGARUVCHILAR
+        let storedCategories = []; 
+        let currentQuizQuestions = []; 
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswers = [];
+        let isAdmin = false;
+        let currentCategoryIndexGlobal = -1; // Qaysi bo'limda ekanligimizni eslab qolish uchun
+
+        // Dastur ishga tushganda ma'lumotlarni yuklash
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategoriesFromStorage();
+            renderUserCategories();
+        });
+
+        // --- LOCAL STORAGE BILAN ISHLASH ---
+        function loadCategoriesFromStorage() {
+            const data = localStorage.getItem('zokirov_quiz_data');
+            if (data) {
+                storedCategories = JSON.parse(data);
+            } else {
+                storedCategories = [];
+            }
         }
-    }
 
-    // SAQLASH (YANGI YOKI TAHRIRLANGAN)
-    async function saveData() {
-        const id = document.getElementById('editId').value;
-        const body = {
-            category: document.getElementById('inCat').value, 
-            question: document.getElementById('inQ').value,
-            options: [
-                document.getElementById('inA').value, 
-                document.getElementById('inB').value, 
-                document.getElementById('inC').value, 
-                document.getElementById('inD').value
-            ],
-            correct: LETTERS.indexOf(document.getElementById('inCorrect').value.toUpperCase())
-        };
+        function saveCategoriesToStorage() {
+            localStorage.setItem('zokirov_quiz_data', JSON.stringify(storedCategories));
+            renderUserCategories();
+            if(isAdmin) renderAdminCategories();
+        }
 
-        if(!body.category || !body.question || body.correct === -1) return alert("Barcha maydonlarni to'ldiring!");
+        // --- ADMIN PANEL LOGIKASI ---
+        function toggleAdminLogin() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('subCategoryMenu').style.display = 'none';
+            document.getElementById('loginPanel').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+        }
 
-        let url = `${SB_URL}/rest/v1/test`;
-        let method = "POST";
-        if(id) { url += `?test=eq.${id}`; method = "PATCH"; }
+        function hideLogin() {
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').textContent = '';
+        }
 
-        const r = await fetch(url, {
-            method: method,
-            headers: { 
-                "apikey": SB_KEY, 
-                "Authorization": `Bearer ${SB_KEY}`, 
-                "Content-Type": "application/json", 
-                "Prefer": "return=minimal" 
-            },
-            body: JSON.stringify(body)
+        function checkAdmin() {
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === 'zokirov0712') {
+                isAdmin = true;
+                document.getElementById('loginPanel').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                renderAdminCategories();
+            } else {
+                document.getElementById('loginError').textContent = 'Parol noto\'g\'ri!';
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+            renderUserCategories();
+        }
+
+        function deleteCategory(index) {
+            if(confirm("Rostdan ham ushbu bo'limni o'chirmoqchimisiz?")) {
+                storedCategories.splice(index, 1);
+                saveCategoriesToStorage();
+            }
+        }
+
+        // --- FAYL YUKLASH LOGIKASI ---
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+
+        uploadArea.addEventListener('click', () => {
+            const catName = document.getElementById('categoryName').value;
+            if(!catName.trim()) { alert("Iltimos, avval bo'lim nomini kiriting!"); return; }
+            fileInput.click();
         });
-        if(r.ok) { alert("Saqlandi!"); resetForm(); loadDB(); }
-    }
 
-    function editQuestion(id) {
-        const q = fullDB.find(x => x.test === id);
-        document.getElementById('editId').value = q.test;
-        document.getElementById('inCat').value = q.category;
-        document.getElementById('inQ').value = q.question;
-        const opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-        document.getElementById('inA').value = opts[0];
-        document.getElementById('inB').value = opts[1];
-        document.getElementById('inC').value = opts[2];
-        document.getElementById('inD').value = opts[3];
-        document.getElementById('inCorrect').value = LETTERS[q.correct];
-        
-        document.getElementById('formTitle').innerText = "Savolni tahrirlash";
-        document.getElementById('cancelEdit').classList.remove('hidden');
-        document.getElementById('saveBtn').innerText = "O'zgarishlarni saqlash";
-        document.getElementById('adminAside').scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    async function deleteQuestion(id) { 
-        if(confirm("Savolni o'chirishni xohlaysizmi?")) { 
-            await fetch(`${SB_URL}/rest/v1/test?test=eq.${id}`, { 
-                method: "DELETE", 
-                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
-            }); 
-            loadDB(); 
-        } 
-    }
-
-    async function deleteCategory(cat) { 
-        if(confirm(`${cat} bo'limini butunlay o'chirib tashlaysizmi?`)) { 
-            await fetch(`${SB_URL}/rest/v1/test?category=eq.${cat}`, { 
-                method: "DELETE", 
-                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` } 
-            }); 
-            loadDB(); 
-        } 
-    }
-
-    async function editCategoryName(oldCat) {
-        const newCat = prompt("Yangi bo'lim nomi:", oldCat);
-        if(!newCat || newCat === oldCat) return;
-        await fetch(`${SB_URL}/rest/v1/test?category=eq.${oldCat}`, {
-            method: "PATCH",
-            headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ category: newCat })
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => { uploadArea.classList.remove('dragover'); });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const catName = document.getElementById('categoryName').value;
+            if(!catName.trim()) { alert("Iltimos, avval bo'lim nomini kiriting!"); return; }
+            handleFile(e.dataTransfer.files[0]);
         });
-        loadDB();
-    }
 
-    function resetForm() {
-        document.getElementById('editId').value = ""; 
-        document.getElementById('inQ').value = ""; 
-        document.getElementById('inA').value = ""; 
-        document.getElementById('inB').value = ""; 
-        document.getElementById('inC').value = ""; 
-        document.getElementById('inD').value = ""; 
-        document.getElementById('inCorrect').value = "";
-        document.getElementById('formTitle').innerText = "Yangi savol qo'shish";
-        document.getElementById('cancelEdit').classList.add('hidden');
-        document.getElementById('saveBtn').innerText = "Saqlash";
-    }
-
-    // TEST FUNKSIYALARI
-    async function startTest() {
-        const cat = document.getElementById('categorySelect').value;
-        if(!cat) return alert("Bo'limni tanlang!");
-        quizData = fullDB.filter(x => x.category === cat);
-        quizData.sort(() => Math.random() - 0.5);
-        currentIdx = 0; score = 0; userChoices = [];
-        document.getElementById('startPage').classList.add('hidden');
-        document.getElementById('resultPage').classList.add('hidden');
-        document.getElementById('quizPage').classList.remove('hidden');
-        showQ();
-    }
-
-    function showQ() {
-        const q = quizData[currentIdx];
-        document.getElementById('questionText').innerText = `${currentIdx + 1}. ${q.question}`;
-        const box = document.getElementById('optionsBox');
-        box.innerHTML = "";
-
-        let originalOpts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-        let mappedOpts = originalOpts.map((txt, i) => ({ txt, originalIdx: i }));
-        mappedOpts.sort(() => Math.random() - 0.5);
-
-        mappedOpts.forEach((opt, i) => {
-            const b = document.createElement('button');
-            b.className = "opt-btn";
-            b.innerHTML = `<span style="font-weight:bold; color:var(--accent); margin-right:15px;">${LETTERS[i]})</span> ${opt.txt}`;
-            b.onclick = () => {
-                userChoices.push(opt.originalIdx);
-                if(opt.originalIdx === q.correct) score++;
-                currentIdx++;
-                currentIdx < quizData.length ? showQ() : finish();
-            };
-            box.appendChild(b);
+        fileInput.addEventListener('change', (e) => {
+            const catName = document.getElementById('categoryName').value;
+            if(!catName.trim()) { alert("Iltimos, avval bo'lim nomini kiriting!"); return; }
+            handleFile(e.target.files[0]);
         });
-    }
 
-    function finish() {
-        document.getElementById('quizPage').classList.add('hidden');
-        document.getElementById('resultPage').classList.remove('hidden');
-        document.getElementById('scoreDisplay').innerText = `${score} / ${quizData.length}`;
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    }
+        function handleFile(file) {
+            if (!file) return;
+            const fileName = file.name.toLowerCase();
 
-    function showAnalysis() {
-        const analysisBox = document.getElementById('analysisBox');
-        analysisBox.classList.toggle('hidden');
-        document.getElementById('analysisList').innerHTML = quizData.map((q, i) => {
-            const isCorrect = userChoices[i] === q.correct;
-            let opts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-            return `
-                <div class="analysis-card ${isCorrect ? 'correct' : 'wrong'}">
-                    <b>${i+1}. ${q.question}</b><br>
-                    <small style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'}">Siz: ${LETTERS[userChoices[i]] || '?'}) ${opts[userChoices[i]] || 'Belgilanmagan'}</small><br>
-                    ${!isCorrect ? `<small style="color:var(--success)">To'g'ri: ${LETTERS[q.correct]}) ${opts[q.correct]}</small>` : ''}
+            if (fileName.endsWith('.txt')) {
+                const reader = new FileReader();
+                reader.onload = (e) => processQuestions(e.target.result);
+                reader.readAsText(file);
+            } else if (fileName.endsWith('.docx')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    mammoth.extractRawText({arrayBuffer: e.target.result})
+                        .then(result => processQuestions(result.value))
+                        .catch(err => showError('DOCX xatolik: ' + err.message));
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                showError('Faqat .txt yoki .docx fayl yuklang!');
+            }
+        }
+
+        function processQuestions(text) {
+            try {
+                const parsed = parseQuestionsLogic(text);
+                if (parsed.length === 0) {
+                    showError("Faylda savollar topilmadi yoki format noto'g'ri.");
+                    return;
+                }
+
+                const catName = document.getElementById('categoryName').value.trim();
+                
+                storedCategories.push({
+                    name: catName,
+                    questions: parsed,
+                    date: new Date().toLocaleDateString()
+                });
+
+                saveCategoriesToStorage();
+                showSuccess(`✓ "${catName}" bo'limi muvaffaqiyatli qo'shildi! (${parsed.length} ta savol)`);
+                
+                document.getElementById('categoryName').value = '';
+                document.getElementById('fileInput').value = '';
+                
+            } catch (e) {
+                showError("Xatolik: " + e.message);
+            }
+        }
+
+        function parseQuestionsLogic(text) {
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            let rawQuestions = [];
+            let currentQ = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const questionMatch = line.match(/^(\d+)[\.\)]\s*(.+)$/);
+                const cleanLine = line.replace(/^[*#\[\]\s]+/, '');
+                const optionMatch = cleanLine.match(/^([A-Da-d])[\.\)]\s*(.+)$/);
+
+                if (questionMatch) {
+                    if (currentQ) rawQuestions.push(currentQ);
+                    currentQ = { questionText: questionMatch[2], parsedOptions: [] };
+                } else if (optionMatch && currentQ) {
+                    const isMarkedCorrect = line.includes('#') || line.includes('*') || line.includes('[+') || (line.startsWith('+'));
+                    currentQ.parsedOptions.push({
+                        text: optionMatch[2],
+                        isCorrect: isMarkedCorrect
+                    });
+                } else if (currentQ) {
+                    if (currentQ.parsedOptions.length === 0) currentQ.questionText += " " + line;
+                    else currentQ.parsedOptions[currentQ.parsedOptions.length - 1].text += " " + line;
+                }
+            }
+            if (currentQ) rawQuestions.push(currentQ);
+
+            return rawQuestions.map(q => {
+                let correctIndex = q.parsedOptions.findIndex(o => o.isCorrect);
+                if (correctIndex === -1 && q.parsedOptions.length > 0) correctIndex = 0; 
+                
+                if (q.parsedOptions.length >= 2) {
+                    return {
+                        q: q.questionText,
+                        o: q.parsedOptions.map(opt => opt.text),
+                        c: correctIndex
+                    };
+                }
+                return null;
+            }).filter(q => q !== null);
+        }
+
+        // --- RENDER QILISH ---
+        function renderUserCategories() {
+            const grid = document.getElementById('categoryGrid');
+            const empty = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            if (storedCategories.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+
+            const icons = ['📚', '📝', '✍️', '📖', '📕', '📗', '📘', '📙'];
+            storedCategories.forEach((cat, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.innerHTML = `
+                    ${icons[index % icons.length]} ${cat.name}<br>
+                    <small>${cat.questions.length} ta savol</small>
+                `;
+                // Bu yerda o'zgarish: endi to'g'ridan to'g'ri test emas, bo'lim ichini ochadi
+                btn.onclick = () => openSubCategoryMenu(index);
+                grid.appendChild(btn);
+            });
+        }
+
+        function renderAdminCategories() {
+            const grid = document.getElementById('adminCategoryList');
+            grid.innerHTML = '';
+            
+            if (storedCategories.length === 0) {
+                grid.innerHTML = '<p>Hozircha bo\'limlar yo\'q</p>';
+                return;
+            }
+
+            storedCategories.forEach((cat, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'category-btn';
+                btn.style.cursor = 'default';
+                btn.innerHTML = `
+                    🗑️ ${cat.name}<br>
+                    <small>${cat.questions.length} ta savol</small>
+                    <button class="delete-btn admin-mode" onclick="deleteCategory(${index})">X</button>
+                `;
+                grid.appendChild(btn);
+            });
+        }
+
+        // --- QISMLARGA BO'LISH (YANGI FUNKSIYA) ---
+        function openSubCategoryMenu(index) {
+            currentCategoryIndexGlobal = index;
+            const category = storedCategories[index];
+            const totalQuestions = category.questions.length;
+
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('subCategoryMenu').style.display = 'block';
+            document.getElementById('subCategoryTitle').textContent = `"${category.name}" - Qismni tanlang`;
+
+            const grid = document.getElementById('subCategoryGrid');
+            grid.innerHTML = '';
+
+            // 50 tadan qilib bo'lib chiqamiz
+            let partNumber = 1;
+            for (let i = 0; i < totalQuestions; i += 50) {
+                const end = Math.min(i + 50, totalQuestions);
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.innerHTML = `
+                    📝 ${partNumber}-Qism<br>
+                    <small>Savollar: ${i + 1} - ${end}</small>
+                `;
+                // Start va End indekslarni yuboramiz
+                btn.onclick = () => startQuizChunk(index, i, end);
+                grid.appendChild(btn);
+                partNumber++;
+            }
+        }
+
+        // --- TEST ISHLASH LOGIKASI ---
+        function startQuizChunk(catIndex, startIndex, endIndex) {
+            // Faqat kerakli oraliqdagi savollarni kesib olamiz
+            const allQuestions = storedCategories[catIndex].questions;
+            currentQuizQuestions = allQuestions.slice(startIndex, endIndex);
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            document.getElementById('subCategoryMenu').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuizQuestions[currentQuestionIndex];
+            const optionsWithData = question.o.map((opt, idx) => ({
+                text: opt,
+                isCorrect: idx === question.c
+            }));
+            
+            // Shuffle (Variantlarni aralashtirish)
+            for (let i = optionsWithData.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsWithData[i], optionsWithData[j]] = [optionsWithData[j], optionsWithData[i]];
+            }
+
+            const card = document.getElementById('questionCard');
+            card.innerHTML = `
+                <div class="question-number">Savol ${currentQuestionIndex + 1} / ${currentQuizQuestions.length}</div>
+                <div class="question-text">${question.q}</div>
+                <div class="options">
+                    ${optionsWithData.map((opt, idx) => `
+                        <div class="option" onclick="selectOption(${idx}, ${opt.isCorrect})" id="option${idx}">
+                            ${opt.text}
+                        </div>
+                    `).join('')}
                 </div>
+                <div class="feedback" id="feedback"></div>
             `;
-        }).join('');
-    }
+            answered = false;
+            updateProgress();
+        }
 
-    function restartTest() { 
-        startTest(); 
-    }
+        function selectOption(idx, isCorrect) {
+            if (answered) return;
+            answered = true;
+            const el = document.getElementById('option' + idx);
+            const feedback = document.getElementById('feedback');
+            
+            el.classList.add('selected');
+            if (isCorrect) {
+                score++;
+                el.classList.add('correct');
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ To\'g\'ri javob!';
+            } else {
+                el.classList.add('wrong');
+                feedback.className = 'feedback wrong';
+                feedback.textContent = '✗ Noto\'g\'ri javob!';
+                
+                document.querySelectorAll('.option').forEach(opt => {
+                     if(opt.getAttribute('onclick').includes('true')) opt.classList.add('correct');
+                });
+            }
+            feedback.style.display = 'block';
+            userAnswers.push({ q: currentQuizQuestions[currentQuestionIndex].q, correct: isCorrect });
+        }
 
-    loadDB();
-</script>
+        function nextQuestion() {
+            if (!answered) { alert('Javobni tanlang!'); return; }
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= currentQuizQuestions.length) showResults();
+            else showQuestion();
+        }
+
+        function updateProgress() {
+            const pct = ((currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = pct + '%';
+        }
+
+        function showResults() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            const total = currentQuizQuestions.length;
+            const pct = (score / total * 100).toFixed(1);
+            
+            document.getElementById('scoreDisplay').textContent = `${score} / ${total}`;
+            document.getElementById('resultDetails').innerHTML = `
+                <div class="result-row"><span>Foiz:</span> <b>${pct}%</b></div>
+                <div style="margin-top:20px; font-size: 20px;">${pct >= 70 ? '🎉 Ajoyib!' : '📚 Yaxshiroq harakat qiling!'}</div>
+            `;
+        }
+        
+        function showAnalysis() {
+            let html = '<h3>Tahlil</h3>';
+            userAnswers.forEach((ans, i) => {
+                html += `<div style="padding:10px; margin:5px 0; background:${ans.correct?'#e8f5e9':'#ffebee'}">
+                    <b>${i+1}.</b> ${ans.q} - ${ans.correct ? 'To\'g\'ri' : 'Xato'}
+                </div>`;
+            });
+            document.getElementById('resultDetails').innerHTML = html;
+        }
+
+        // MENYU NAVIGATSIYASI
+        function showMainMenu() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('subCategoryMenu').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+        }
+
+        // Test tugaganda "Qismlar menyusi"ga qaytish uchun
+        function showSubMenuFromQuiz() {
+            if(currentCategoryIndexGlobal !== -1) {
+                document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('results').style.display = 'none';
+                // Qayta sub-menyuni ochamiz
+                openSubCategoryMenu(currentCategoryIndexGlobal);
+            } else {
+                showMainMenu();
+            }
+        }
+
+        function showSuccess(msg) { fileInfo.innerHTML = `<div class="file-info">${msg}</div>`; }
+        function showError(msg) { fileInfo.innerHTML = `<div class="error-message">${msg}</div>`; }
+    </script>
 </body>
 </html>
