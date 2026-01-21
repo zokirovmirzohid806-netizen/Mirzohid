@@ -12,7 +12,7 @@
         .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; position: relative; }
         .header h1 { font-size: 28px; margin-bottom: 10px; }
         .developer { font-size: 14px; opacity: 0.9; }
-        
+
         /* ADMIN TUGMASI */
         .admin-btn { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; }
         .admin-btn:hover { background: rgba(255,255,255,0.4); }
@@ -33,12 +33,12 @@
         .custom-input:focus { border-color: #667eea; }
 
         /* MENYU VA OYNALAR */
-        .main-menu { padding: 40px; display: block; } 
+        .main-menu { padding: 40px; display: block; }
         .menu-title { text-align: center; color: #333; margin-bottom: 30px; font-size: 24px; }
         .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .category-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 30px 20px; border-radius: 15px; cursor: pointer; font-size: 18px; font-weight: bold; transition: transform 0.3s, box-shadow 0.3s; position: relative; }
         .category-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
-        
+
         .delete-btn { position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-size: 14px; display: none; z-index: 10; }
         .category-btn:hover .delete-btn.admin-mode { display: block; }
 
@@ -48,14 +48,14 @@
         .progress-fill { background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s; }
         .question-card { background: #f8f9fa; padding: 30px; border-radius: 15px; margin-bottom: 30px; }
         .question-number { color: #667eea; font-weight: bold; margin-bottom: 15px; font-size: 16px; }
-        .question-text { font-size: 20px; color: #333; margin-bottom: 25px; line-height: 1.6; }
+        .question-text { font-size: 18px; color: #333; margin-bottom: 25px; line-height: 1.8; white-space: pre-wrap; font-family: 'Courier New', monospace; }
         .options { display: flex; flex-direction: column; gap: 15px; }
-        .option { background: white; padding: 20px; border-radius: 10px; cursor: pointer; border: 2px solid #e0e0e0; transition: all 0.3s; font-size: 16px; }
+        .option { background: white; padding: 20px; border-radius: 10px; cursor: pointer; border: 2px solid #e0e0e0; transition: all 0.3s; font-size: 16px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
         .option:hover { border-color: #667eea; transform: translateX(5px); }
         .option.selected { border-color: #667eea; background: #f0f4ff; }
         .option.correct { border-color: #4caf50; background: #e8f5e9; }
         .option.wrong { border-color: #f44336; background: #ffebee; }
-        
+
         /* TUGMALAR */
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: transform 0.3s; margin: 10px; }
         .btn:hover { transform: scale(1.05); }
@@ -75,7 +75,7 @@
         .feedback.wrong { background: #ffebee; color: #c62828; }
         .file-info { background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 20px 0; color: #2e7d32; }
         .error-message { background: #ffebee; padding: 15px; border-radius: 10px; margin: 20px 0; color: #c62828; }
-        
+
         .empty-state { text-align: center; color: #888; padding: 20px; }
     </style>
 </head>
@@ -83,7 +83,7 @@
     <div class="container">
         <div class="header">
             <button class="admin-btn" onclick="toggleAdminLogin()">Admin Panel</button>
-            <h1>🎓 Akademik Yozuv Test Dasturi</h1>
+            <h1>🎓 Mirzohid test Dasturi</h1>
             <div class="developer">Dastur yaratuvchisi: Zokirov Mirzohid</div>
         </div>
 
@@ -101,7 +101,7 @@
 
         <div id="adminDashboard" class="upload-section">
             <h2 class="menu-title">Yangi Test Qo'shish</h2>
-            
+
             <div class="input-group">
                 <input type="text" id="categoryName" class="custom-input" placeholder="Bo'lim nomini kiriting (masalan: Tarix 1-kitob)">
             </div>
@@ -113,7 +113,7 @@
             </div>
             <input type="file" id="fileInput" accept=".docx,.txt">
             <div id="fileInfo"></div>
-            
+
             <div class="controls">
                 <button class="btn btn-secondary" onclick="logoutAdmin()">Chiqish</button>
             </div>
@@ -167,16 +167,17 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
     <script>
         // GLOBAL O'ZGARUVCHILAR
-        let storedCategories = []; 
-        let currentQuizQuestions = []; 
+        let storedCategories = [];
+        let currentQuizQuestions = [];
         let currentQuestionIndex = 0;
         let score = 0;
         let answered = false;
         let userAnswers = [];
         let isAdmin = false;
-        let currentCategoryIndexGlobal = -1; // Qaysi bo'limda ekanligimizni eslab qolish uchun
+        let currentCategoryIndexGlobal = -1; 
 
         // Dastur ishga tushganda ma'lumotlarni yuklash
         document.addEventListener('DOMContentLoaded', () => {
@@ -301,7 +302,7 @@
                 }
 
                 const catName = document.getElementById('categoryName').value.trim();
-                
+
                 storedCategories.push({
                     name: catName,
                     questions: parsed,
@@ -310,46 +311,72 @@
 
                 saveCategoriesToStorage();
                 showSuccess(`✓ "${catName}" bo'limi muvaffaqiyatli qo'shildi! (${parsed.length} ta savol)`);
-                
+
                 document.getElementById('categoryName').value = '';
                 document.getElementById('fileInput').value = '';
-                
+
             } catch (e) {
                 showError("Xatolik: " + e.message);
             }
         }
 
         function parseQuestionsLogic(text) {
-            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            const lines = text.split('\n').map(l => l.trim());
             let rawQuestions = [];
             let currentQ = null;
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
+                if (!line) continue;
+                
+                // Savol raqami bilan boshlanadimi tekshirish (masalan: "1.", "1)", "133.")
                 const questionMatch = line.match(/^(\d+)[\.\)]\s*(.+)$/);
-                const cleanLine = line.replace(/^[*#\[\]\s]+/, '');
-                const optionMatch = cleanLine.match(/^([A-Da-d])[\.\)]\s*(.+)$/);
-
+                
                 if (questionMatch) {
-                    if (currentQ) rawQuestions.push(currentQ);
-                    currentQ = { questionText: questionMatch[2], parsedOptions: [] };
-                } else if (optionMatch && currentQ) {
-                    const isMarkedCorrect = line.includes('#') || line.includes('*') || line.includes('[+') || (line.startsWith('+'));
-                    currentQ.parsedOptions.push({
-                        text: optionMatch[2],
-                        isCorrect: isMarkedCorrect
-                    });
-                } else if (currentQ) {
-                    if (currentQ.parsedOptions.length === 0) currentQ.questionText += " " + line;
-                    else currentQ.parsedOptions[currentQ.parsedOptions.length - 1].text += " " + line;
+                    // Agar oldingi savol bor bo'lsa, uni saqlash
+                    if (currentQ && currentQ.parsedOptions.length > 0) {
+                        rawQuestions.push(currentQ);
+                    }
+                    // Yangi savolni boshlash
+                    currentQ = { 
+                        questionText: questionMatch[2].trim(), 
+                        parsedOptions: [] 
+                    };
+                } else {
+                    // Javob variantlarini tekshirish
+                    const cleanLine = line.replace(/^[*#\[\]\s]+/, '');
+                    const optionMatch = cleanLine.match(/^([A-Da-d])[\.\)]\s*(.+)$/);
+                    
+                    if (optionMatch && currentQ) {
+                        // To'g'ri javob belgilari: #, *, [+], yoki satr boshida +
+                        const isMarkedCorrect = line.includes('#') || line.includes('*') || line.includes('[+') || line.startsWith('+');
+                        currentQ.parsedOptions.push({
+                            text: optionMatch[2].trim(),
+                            isCorrect: isMarkedCorrect
+                        });
+                    } else if (currentQ) {
+                        // Agar bu savol yoki javob emas, lekin currentQ mavjud bo'lsa
+                        // Davomini qo'shish (ko'p qatorli matn)
+                        if (currentQ.parsedOptions.length === 0) {
+                            currentQ.questionText += "\n" + line;
+                        } else {
+                            // Oxirgi javob variantiga qo'shish
+                            currentQ.parsedOptions[currentQ.parsedOptions.length - 1].text += "\n" + line;
+                        }
+                    }
                 }
             }
-            if (currentQ) rawQuestions.push(currentQ);
+            
+            // Oxirgi savolni qo'shish
+            if (currentQ && currentQ.parsedOptions.length > 0) {
+                rawQuestions.push(currentQ);
+            }
 
+            // Savollarni qayta ishlash
             return rawQuestions.map(q => {
                 let correctIndex = q.parsedOptions.findIndex(o => o.isCorrect);
-                if (correctIndex === -1 && q.parsedOptions.length > 0) correctIndex = 0; 
-                
+                if (correctIndex === -1 && q.parsedOptions.length > 0) correctIndex = 0;
+
                 if (q.parsedOptions.length >= 2) {
                     return {
                         q: q.questionText,
@@ -381,7 +408,6 @@
                     ${icons[index % icons.length]} ${cat.name}<br>
                     <small>${cat.questions.length} ta savol</small>
                 `;
-                // Bu yerda o'zgarish: endi to'g'ridan to'g'ri test emas, bo'lim ichini ochadi
                 btn.onclick = () => openSubCategoryMenu(index);
                 grid.appendChild(btn);
             });
@@ -390,7 +416,7 @@
         function renderAdminCategories() {
             const grid = document.getElementById('adminCategoryList');
             grid.innerHTML = '';
-            
+
             if (storedCategories.length === 0) {
                 grid.innerHTML = '<p>Hozircha bo\'limlar yo\'q</p>';
                 return;
@@ -409,7 +435,7 @@
             });
         }
 
-        // --- QISMLARGA BO'LISH (YANGI FUNKSIYA) ---
+        // --- QISMLARGA BO'LISH ---
         function openSubCategoryMenu(index) {
             currentCategoryIndexGlobal = index;
             const category = storedCategories[index];
@@ -422,7 +448,6 @@
             const grid = document.getElementById('subCategoryGrid');
             grid.innerHTML = '';
 
-            // 50 tadan qilib bo'lib chiqamiz
             let partNumber = 1;
             for (let i = 0; i < totalQuestions; i += 50) {
                 const end = Math.min(i + 50, totalQuestions);
@@ -432,7 +457,6 @@
                     📝 ${partNumber}-Qism<br>
                     <small>Savollar: ${i + 1} - ${end}</small>
                 `;
-                // Start va End indekslarni yuboramiz
                 btn.onclick = () => startQuizChunk(index, i, end);
                 grid.appendChild(btn);
                 partNumber++;
@@ -441,14 +465,13 @@
 
         // --- TEST ISHLASH LOGIKASI ---
         function startQuizChunk(catIndex, startIndex, endIndex) {
-            // Faqat kerakli oraliqdagi savollarni kesib olamiz
             const allQuestions = storedCategories[catIndex].questions;
             currentQuizQuestions = allQuestions.slice(startIndex, endIndex);
-            
+
             currentQuestionIndex = 0;
             score = 0;
             userAnswers = [];
-            
+
             document.getElementById('subCategoryMenu').style.display = 'none';
             document.getElementById('quizContainer').style.display = 'block';
             showQuestion();
@@ -460,8 +483,7 @@
                 text: opt,
                 isCorrect: idx === question.c
             }));
-            
-            // Shuffle (Variantlarni aralashtirish)
+
             for (let i = optionsWithData.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [optionsWithData[i], optionsWithData[j]] = [optionsWithData[j], optionsWithData[i]];
@@ -489,7 +511,7 @@
             answered = true;
             const el = document.getElementById('option' + idx);
             const feedback = document.getElementById('feedback');
-            
+
             el.classList.add('selected');
             if (isCorrect) {
                 score++;
@@ -500,7 +522,7 @@
                 el.classList.add('wrong');
                 feedback.className = 'feedback wrong';
                 feedback.textContent = '✗ Noto\'g\'ri javob!';
-                
+
                 document.querySelectorAll('.option').forEach(opt => {
                      if(opt.getAttribute('onclick').includes('true')) opt.classList.add('correct');
                 });
@@ -518,23 +540,24 @@
 
         function updateProgress() {
             const pct = ((currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
-            document.getElementById('progressFill').style.width = pct + '%';
+            const fill = document.getElementById('progressFill');
+            if(fill) fill.style.width = pct + '%';
         }
 
         function showResults() {
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('results').style.display = 'block';
-            
+
             const total = currentQuizQuestions.length;
             const pct = (score / total * 100).toFixed(1);
-            
+
             document.getElementById('scoreDisplay').textContent = `${score} / ${total}`;
             document.getElementById('resultDetails').innerHTML = `
                 <div class="result-row"><span>Foiz:</span> <b>${pct}%</b></div>
                 <div style="margin-top:20px; font-size: 20px;">${pct >= 70 ? '🎉 Ajoyib!' : '📚 Yaxshiroq harakat qiling!'}</div>
             `;
         }
-        
+
         function showAnalysis() {
             let html = '<h3>Tahlil</h3>';
             userAnswers.forEach((ans, i) => {
@@ -545,7 +568,6 @@
             document.getElementById('resultDetails').innerHTML = html;
         }
 
-        // MENYU NAVIGATSIYASI
         function showMainMenu() {
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('results').style.display = 'none';
@@ -553,12 +575,10 @@
             document.getElementById('mainMenu').style.display = 'block';
         }
 
-        // Test tugaganda "Qismlar menyusi"ga qaytish uchun
         function showSubMenuFromQuiz() {
             if(currentCategoryIndexGlobal !== -1) {
                 document.getElementById('quizContainer').style.display = 'none';
                 document.getElementById('results').style.display = 'none';
-                // Qayta sub-menyuni ochamiz
                 openSubCategoryMenu(currentCategoryIndexGlobal);
             } else {
                 showMainMenu();
