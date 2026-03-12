@@ -917,13 +917,13 @@
 
                 const user = tg.initDataUnsafe?.user;
 
-                if (user) {
+                /*if (user) {
                     const telegramNick = user.username ? `@${user.username}` : `tg_${user.id}`;
 
                     if (isUserBlocked(telegramNick)) {
                         alert('Sizning hisobingiz bloklangan. Admin bilan bog\'laning: @zokirov_0712');
                         return false;
-                    }
+                    }*/
 
                     const username = user.first_name + (user.last_name ? ' ' + user.last_name : '');
 
